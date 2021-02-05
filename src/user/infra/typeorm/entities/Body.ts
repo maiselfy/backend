@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import User from './User';
 
@@ -26,6 +28,7 @@ class Bodies {
     () => User,
     user => user.bodies,
   )
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @CreateDateColumn({ type: 'timestamp' })

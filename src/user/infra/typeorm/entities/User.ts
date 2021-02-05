@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -27,12 +29,10 @@ class User {
   @Column()
   birthdate: Date;
 
-  @Column()
-  body_id: string;
-
   @OneToMany(
     () => Body,
     body => body.user,
+    { cascade: true },
   )
   bodies: Body[];
 
