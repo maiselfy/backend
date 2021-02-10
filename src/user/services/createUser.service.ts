@@ -3,13 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import ICreateUserDTO from '../dtos/ICreateUserDTO';
 import User from '../infra/typeorm/entities/User';
+import { BCryptHashProvider } from '../providers/HashProvider/implementations/BCryptHashProvider';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 @Injectable()
 export default class Service {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
-    @Inject('HashProvider') private HashProvider: IHashProvider,
+    @Inject(BCryptHashProvider) private readonly HashProvider: IHashProvider,
   ) {}
   async execute({
     name,

@@ -9,6 +9,9 @@ import CreateUserService from './services/createUser.service';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Body])],
   controllers: [HttpController],
-  providers: [CreateUserService, BCryptHashProvider],
+  providers: [
+    CreateUserService,
+    BCryptHashProvider
+  ],
 })
 export class UserModule {}
