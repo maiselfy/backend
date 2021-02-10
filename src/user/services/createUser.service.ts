@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import ICreateUserDTO from '../dtos/ICreateUserDTO';
 import User from '../infra/typeorm/entities/User';
-import Body from '../infra/typeorm/entities/Body';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 @Injectable()
 export default class Service {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    @Inject('HashProvider') private HashProvider: IHashProvider,
   ) {}
   async execute({
     name,
@@ -22,11 +23,12 @@ export default class Service {
     if (userExists) {
       throw new Error('This email already in use.');
     }
+    const passwordHash = await this.HashProvider.generateHash(password);
     const user = this.usersRepository.create({
       name,
       lastname,
       email,
-      password,
+      password: passwordHash,
       birthdate,
       bodies: [body],
     });
