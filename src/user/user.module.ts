@@ -6,12 +6,14 @@ import { BCryptHashProvider } from './providers/HashProvider/implementations/BCr
 import User from './infra/typeorm/entities/User';
 import Body from './infra/typeorm/entities/Body';
 import CreateUserService from './services/createUser.service';
+import AuthenticateUserService from './services/authenticateUser.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Body])],
   controllers: [HttpController, SessionController],
   providers: [
     CreateUserService,
+    AuthenticateUserService,
     BCryptHashProvider
   ],
 })
