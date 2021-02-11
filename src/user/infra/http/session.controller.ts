@@ -1,9 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 
 @Controller('session')
 export class SessionController {
-    @Get()
-    test(){
+    @Post()
+    createSession(){
         return {
             "status": "Ok"
         }
