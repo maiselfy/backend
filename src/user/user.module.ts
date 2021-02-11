@@ -7,9 +7,10 @@ import User from './infra/typeorm/entities/User';
 import Body from './infra/typeorm/entities/Body';
 import CreateUserService from './services/createUser.service';
 import AuthenticateUserService from './services/authenticateUser.service';
+import {JwtModule} from '@nestjs/jwt'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Body])],
+  imports: [TypeOrmModule.forFeature([User, Body]), JwtModule.register({secret: 'teste'})],
   controllers: [HttpController, SessionController],
   providers: [
     CreateUserService,
