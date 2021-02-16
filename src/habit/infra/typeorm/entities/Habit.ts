@@ -16,14 +16,22 @@ class Habit {
   @Column()
   description: string;
 
-  //@Column()
-  //reminder_question:
+  @Column()
+  reminder_question: string;
 
-  //@Column()
-  //color:
+  @Column()
+  color: string;
 
-  //frequency:
+  @Column()
+  frequency: Int16Array;
 
+  @Column()
+  reminder: string;
+
+  @Column()
+  pontuation: Int16Array;
+
+  // Processo para reminder similar ao de body ?
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

@@ -1,11 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import ICreateHabitDTO from '../dtos/ICreateHabitDTO';
+import Habit from '../infra/typeorm/entities/Habit';
 
 @Injectable()
 export default class CreateHabitService {
   constructor(
-    @InjectRepository(Habit) private habitsRepository: Repository<Habit>
+    @InjectRepository(Habit) private habitsRepository: Repository<Habit>,
   ) {}
   async execute({
     id,
