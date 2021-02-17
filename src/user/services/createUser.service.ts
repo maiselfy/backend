@@ -7,7 +7,7 @@ import { BCryptHashProvider } from '../providers/HashProvider/implementations/BC
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 @Injectable()
-export default class Service {
+export default class CreateUserService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
     @Inject(BCryptHashProvider) private readonly HashProvider: IHashProvider,
