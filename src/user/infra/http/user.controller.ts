@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
 import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
 import User from '../typeorm/entities/User';
 import CreateUserService from '../../services/createUser.service';
@@ -20,4 +20,7 @@ export class HttpController {
     });
     return user;
   }
+
+  @Patch()
+  updateAvatar(): Promise<User> {}
 }
