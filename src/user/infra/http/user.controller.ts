@@ -3,7 +3,7 @@ import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
 import User from '../typeorm/entities/User';
 import CreateUserService from '../../services/createUser.service';
 @Controller('user')
-export class HttpController {
+export class UserController {
   constructor(private createUserService: CreateUserService) {}
   @Post()
   createUser(
@@ -21,6 +21,8 @@ export class HttpController {
     return user;
   }
 
-  @Patch()
-  updateAvatar(): Promise<User> {}
+  @Patch('avatar')
+  updateAvatar(): any {
+    return 'funcionou';
+  }
 }
