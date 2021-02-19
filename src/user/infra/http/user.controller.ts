@@ -30,12 +30,14 @@ export class HttpController {
   @Put(':id')
   updateUser(
     @Param('id') id: string,
-    @Body() { name, lastname, email }: IUpdateUserDTO,
+    @Body() { name, lastname, email, password, birthdate }: IUpdateUserDTO,
   ): Promise<User> {
     const updatedUser = this.updateUserService.execute(id, {
       name,
       lastname,
       email,
+      password,
+      birthdate,
     });
     return updatedUser;
   }
