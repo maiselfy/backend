@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import ICreateUserDTO from '../dtos/ICreateUserDTO';
@@ -22,7 +22,10 @@ export default class CreateUserService {
   }: ICreateUserDTO): Promise<User> {
     const userExists = await this.usersRepository.findOne({ where: { email } });
     if (userExists) {
-      throw new Error('This email already in use.');
+      throw new HttpException(
+        'This email already in use.',
+        HttpStatus.CONFLICT,
+      );
     }
     const passwordHash = await this.HashProvider.generateHash(password);
     const user = this.usersRepository.create({

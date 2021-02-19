@@ -37,6 +37,9 @@ class User {
   )
   bodies: Body[];
 
+  @Column()
+  avatar: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 

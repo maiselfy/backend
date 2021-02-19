@@ -1,7 +1,12 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import { secret } from '../../../config/jwt/config.jwt';
-
+interface TokenPayload {
+  iat: number;
+  exp: number;
+  sub: string;
+}
 export function EnsureAuthenticatedMiddleware(
   req: Request,
   res: Response,
@@ -9,14 +14,15 @@ export function EnsureAuthenticatedMiddleware(
 ) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    throw new Error('JWT token is missing');
+    throw new HttpException('JWT token is missing', HttpStatus.UNAUTHORIZED);
   }
   const [, token] = authHeader.split(' ');
   try {
     const decoded = verify(token, secret);
-    console.log(decoded);
+    const { sub } = decoded as TokenPayload;
+    req.user = { id: sub };
     return next();
   } catch {
-    throw new Error('Invalid JWT Token');
+    throw new HttpException('Invalid JWT Token', HttpStatus.UNAUTHORIZED);
   }
 }

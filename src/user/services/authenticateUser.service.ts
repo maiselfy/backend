@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import User from '../infra/typeorm/entities/User';
@@ -16,25 +16,27 @@ export default class AuthenticateUserService {
   ) {}
 
   async execute({ email, password }: ICreateSessionDTO) {
-    const userExists = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({ where: { email } });
 
-    if (!userExists) {
-      throw new Error('This email does not exist in the our database.');
+    if (!user) {
+      throw new HttpException(
+        'This email does not exist in the our database.',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     const verifyUserPassword = await this.HashProvider.compareHash(
       password,
-      userExists.password,
+      user.password,
     );
 
     if (!verifyUserPassword) {
-      throw new Error('Password does not match');
+      throw new HttpException(
+        'Password does not match',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
-    const token = this.jwtService.sign({
-      name: userExists.name,
-      lastname: userExists.lastname,
-      birthdate: userExists.birthdate,
-    });
+    const token = this.jwtService.sign({}, { subject: user.id });
     return token;
   }
 }
