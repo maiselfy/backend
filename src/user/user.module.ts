@@ -16,6 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { secret, expiresIn } from '../config/jwt/config.jwt';
 import { EnsureAuthenticatedMiddleware } from 'src/shared/http/middlewares/ensure-authenticated.middleware';
 import UpdateUserAvatarService from './services/updateUserAvatar.service';
+import UpdateUserService from './services/updateUser.service';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import UpdateUserAvatarService from './services/updateUserAvatar.service';
     AuthenticateUserService,
     BCryptHashProvider,
     UpdateUserAvatarService,
+    UpdateUserService,
   ],
 })
 export class UserModule implements NestModule {

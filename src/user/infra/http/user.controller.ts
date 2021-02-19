@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Param,
   Patch,
   Post,
+  Put,
   Req,
   Res,
   UploadedFile,
@@ -15,11 +17,14 @@ import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import UploadConfig from '../../../config/upload.config';
 import { Request, Response } from 'express';
+import UpdateUserService from 'src/user/services/updateUser.service';
+import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO.interface';
 @Controller('user')
 export class UserController {
   constructor(
     private createUserService: CreateUserService,
     private updateUserAvatarService: UpdateUserAvatarService,
+    private updateUserService: UpdateUserService,
   ) {}
   @Post()
   createUser(
@@ -56,5 +61,19 @@ export class UserController {
         .json(error)
         .send();
     }
+  }
+  @Put(':id')
+  updateUser(
+    @Param('id') id: string,
+    @Body() { name, lastname, email, password, birthdate }: IUpdateUserDTO,
+  ): Promise<User> {
+    const updatedUser = this.updateUserService.execute(id, {
+      name,
+      lastname,
+      email,
+      password,
+      birthdate,
+    });
+    return updatedUser;
   }
 }
