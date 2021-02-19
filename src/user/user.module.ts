@@ -9,6 +9,7 @@ import CreateUserService from './services/createUser.service';
 import AuthenticateUserService from './services/authenticateUser.service';
 import { JwtModule } from '@nestjs/jwt';
 import { secret, expiresIn } from '../config/jwt/config.jwt';
+import UpdateUserService from './services/updateUser.service';
 
 @Module({
   imports: [
@@ -19,6 +20,11 @@ import { secret, expiresIn } from '../config/jwt/config.jwt';
     }),
   ],
   controllers: [HttpController, SessionController],
-  providers: [CreateUserService, AuthenticateUserService, BCryptHashProvider],
+  providers: [
+    CreateUserService,
+    AuthenticateUserService,
+    BCryptHashProvider,
+    UpdateUserService,
+  ],
 })
 export class UserModule {}
