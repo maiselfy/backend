@@ -3,8 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  JoinTable,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -36,6 +34,9 @@ class User {
     { cascade: true },
   )
   bodies: Body[];
+
+  @Column()
+  avatar: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
