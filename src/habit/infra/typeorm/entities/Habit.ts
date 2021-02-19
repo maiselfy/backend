@@ -10,6 +10,9 @@ class Habit {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column('uuid')
+  userId: string;
+
   @Column()
   name: string;
 
@@ -17,21 +20,19 @@ class Habit {
   description: string;
 
   @Column()
-  reminder_question: string;
+  reminderQuestion: string;
 
   @Column()
   color: string;
 
   @Column()
-  frequency: Int16Array;
+  frequency: string;
 
   @Column()
-  reminder: string;
+  reminder: boolean;
 
   @Column()
-  pontuation: Int16Array;
-
-  // Processo para reminder similar ao de body ?
+  pontuation: number;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

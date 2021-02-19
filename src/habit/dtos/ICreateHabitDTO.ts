@@ -1,10 +1,10 @@
 export default interface ICreateHabitDTO {
-  id: string;
+  userId: string;
   name: string;
   description: string;
-  reminder_question: string;
+  reminderQuestion: string;
   color: string;
-  frequency: Int16Array;
-  reminder: string;
-  pontuation: Int16Array;
+  frequency: string;
+  reminder: boolean;
+  pontuation: number;
 }
