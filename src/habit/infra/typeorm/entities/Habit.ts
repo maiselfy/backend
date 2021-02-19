@@ -20,7 +20,7 @@ class Habit {
   description: string;
 
   @Column()
-  reminder_question: string;
+  reminderQuestion: string;
 
   @Column()
   color: string;
@@ -33,8 +33,6 @@ class Habit {
 
   @Column()
   pontuation: number;
-
-  // Processo para reminder similar ao de body ?
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
