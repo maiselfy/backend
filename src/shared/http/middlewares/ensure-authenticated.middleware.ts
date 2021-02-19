@@ -1,7 +1,7 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import { secret } from '../../../config/jwt/config.jwt';
+import { Request, Response, NextFunction } from 'express';
+import { HttpException, HttpStatus } from '@nestjs/common';
 interface TokenPayload {
   iat: number;
   exp: number;

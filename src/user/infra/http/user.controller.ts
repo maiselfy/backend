@@ -10,15 +10,15 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
-import User from '../typeorm/entities/User';
-import CreateUserService from '../../services/createUser.service';
-import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import UploadConfig from '../../../config/upload.config';
 import { Request, Response } from 'express';
-import UpdateUserService from 'src/user/services/updateUser.service';
+import User from '../typeorm/entities/User';
+import UploadConfig from '../../../config/upload.config';
+import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
+import { FileInterceptor } from '@nestjs/platform-express';
+import CreateUserService from '../../services/createUser.service';
 import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO.interface';
+import UpdateUserService from 'src/user/services/updateUser.service';
+import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
 @Controller('user')
 export class UserController {
   constructor(

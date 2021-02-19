@@ -1,10 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import ICreateUserDTO from '../dtos/ICreateUserDTO';
 import User from '../infra/typeorm/entities/User';
-import { BCryptHashProvider } from '../providers/HashProvider/implementations/BCryptHashProvider';
+import { InjectRepository } from '@nestjs/typeorm';
+import ICreateUserDTO from '../dtos/ICreateUserDTO';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { BCryptHashProvider } from '../providers/HashProvider/implementations/BCryptHashProvider';
 
 @Injectable()
 export default class CreateUserService {

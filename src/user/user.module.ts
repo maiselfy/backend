@@ -4,19 +4,19 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserController } from './infra/http/user.controller';
-import { SessionController } from './infra/http/session.controller';
-import { BCryptHashProvider } from './providers/HashProvider/implementations/BCryptHashProvider';
 import User from './infra/typeorm/entities/User';
 import Body from './infra/typeorm/entities/Body';
-import CreateUserService from './services/createUser.service';
-import AuthenticateUserService from './services/authenticateUser.service';
-import { JwtModule } from '@nestjs/jwt';
 import { secret, expiresIn } from '../config/jwt/config.jwt';
-import { EnsureAuthenticatedMiddleware } from 'src/shared/http/middlewares/ensure-authenticated.middleware';
-import UpdateUserAvatarService from './services/updateUserAvatar.service';
+import { UserController } from './infra/http/user.controller';
+import CreateUserService from './services/createUser.service';
 import UpdateUserService from './services/updateUser.service';
+import { SessionController } from './infra/http/session.controller';
+import UpdateUserAvatarService from './services/updateUserAvatar.service';
+import AuthenticateUserService from './services/authenticateUser.service';
+import { BCryptHashProvider } from './providers/HashProvider/implementations/BCryptHashProvider';
+import { EnsureAuthenticatedMiddleware } from 'src/shared/http/middlewares/ensure-authenticated.middleware';
 
 @Module({
   imports: [

@@ -1,8 +1,9 @@
-import { diskStorage } from 'multer';
-
 import { resolve } from 'path';
+import { diskStorage } from 'multer';
 import { randomBytes } from 'crypto';
+
 const tmpFolder = resolve(__dirname, '..', '..', 'tmp');
+
 export default {
   directory: tmpFolder,
   storage: diskStorage({
