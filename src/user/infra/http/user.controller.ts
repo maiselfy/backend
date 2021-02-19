@@ -1,10 +1,16 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Put, Param } from '@nestjs/common';
 import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
 import User from '../typeorm/entities/User';
 import CreateUserService from '../../services/createUser.service';
+import UpdateUserService from '../../services/updateUser.service';
+import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO.interface';
+
 @Controller('user')
 export class HttpController {
-  constructor(private createUserService: CreateUserService) {}
+  constructor(
+    private createUserService: CreateUserService,
+    private updateUserService: UpdateUserService,
+  ) {}
   @Post()
   createUser(
     @Body()
@@ -19,5 +25,18 @@ export class HttpController {
       body,
     });
     return user;
+  }
+
+  @Put(':id')
+  updateUser(
+    @Param('id') id: string,
+    @Body() { name, lastname, email }: IUpdateUserDTO,
+  ): Promise<User> {
+    const updatedUser = this.updateUserService.execute(id, {
+      name,
+      lastname,
+      email,
+    });
+    return updatedUser;
   }
 }
