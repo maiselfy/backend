@@ -1,7 +1,16 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
 import User from '../typeorm/entities/User';
 import CreateUserService from '../../services/createUser.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import UploadConfig from '../../../config/upload.config';
 @Controller('user')
 export class UserController {
   constructor(private createUserService: CreateUserService) {}
@@ -22,7 +31,8 @@ export class UserController {
   }
 
   @Patch('avatar')
-  updateAvatar(): any {
-    return 'funcionou';
+  @UseInterceptors(FileInterceptor('file', UploadConfig))
+  updateAvatar(@UploadedFile() file): any {
+    return { file };
   }
 }
