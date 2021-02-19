@@ -18,9 +18,15 @@ export default class UpdateUserService {
     { name, lastname, email, password, birthdate }: IUpdateUserDTO,
   ): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
-
     if (!user) {
       throw new Error('This user does not exist in the our database.');
+    }
+
+    const emailExists = await this.usersRepository.findOne({
+      where: { email },
+    });
+    if (emailExists) {
+      throw new Error('The email already is used by another user.');
     }
 
     const passwordHash = await this.HashProvider.generateHash(password);
