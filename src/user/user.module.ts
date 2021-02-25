@@ -17,6 +17,7 @@ import UpdateUserAvatarService from './services/updateUserAvatar.service';
 import AuthenticateUserService from './services/authenticateUser.service';
 import { BCryptHashProvider } from './providers/HashProvider/implementations/BCryptHashProvider';
 import { EnsureAuthenticatedMiddleware } from 'src/shared/http/middlewares/ensure-authenticated.middleware';
+import DeleteUserService from './services/deleteUser.service';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { EnsureAuthenticatedMiddleware } from 'src/shared/http/middlewares/ensur
     BCryptHashProvider,
     UpdateUserAvatarService,
     UpdateUserService,
+    DeleteUserService,
   ],
 })
 export class UserModule implements NestModule {

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Param,
   Patch,
   Post,
@@ -19,12 +20,14 @@ import CreateUserService from '../../services/createUser.service';
 import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO.interface';
 import UpdateUserService from 'src/user/services/updateUser.service';
 import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
+import DeleteUserService from 'src/user/services/deleteUser.service';
 @Controller('user')
 export class UserController {
   constructor(
     private createUserService: CreateUserService,
     private updateUserAvatarService: UpdateUserAvatarService,
     private updateUserService: UpdateUserService,
+    private deleteUserService: DeleteUserService,
   ) {}
   @Post()
   createUser(
@@ -75,5 +78,11 @@ export class UserController {
       birthdate,
     });
     return updatedUser;
+  }
+
+  @Delete('delete/:id')
+  deleteUser(@Param('id') id: string): Promise<void> {
+    console.log(id);
+    return this.deleteUserService.execute(id);
   }
 }

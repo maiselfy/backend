@@ -33,14 +33,18 @@ class User {
   @OneToMany(
     () => Body,
     body => body.user,
-    { cascade: true },
   )
   bodies: Body[];
+
+  //@Column()
+  //avatar: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+
+
 }
 export default User;
