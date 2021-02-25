@@ -25,7 +25,7 @@ export default class UpdateUserAvatarService {
       );
     }
 
-    /*if (user.avatar) {
+    if (user.avatar) {
       const userAvatarFilePath = join(uploadConfig.directory, user.avatar);
       const userAvatarFileExists = await promises.stat(userAvatarFilePath);
 
@@ -33,8 +33,8 @@ export default class UpdateUserAvatarService {
         await promises.unlink(userAvatarFilePath);
       }
     }
-    */
-    //user.avatar = avatarFilename;
+
+    user.avatar = avatarFilename;
     await this.usersRepository.save(user);
     return user;
   }

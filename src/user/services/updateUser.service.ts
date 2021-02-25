@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import IUpdateUserDTO from '../dtos/IUpdateUserDTO.interface';
@@ -19,14 +19,20 @@ export default class UpdateUserService {
   ): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
-      throw new Error('This user does not exist in the our database.');
+      throw new HttpException(
+        'This user does not exist in the our database.',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     const emailExists = await this.usersRepository.findOne({
       where: { email },
     });
     if (emailExists) {
-      throw new Error('The email already is used by another user.');
+      throw new HttpException(
+        'The email already is used by another user.',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     const passwordHash = await this.HashProvider.generateHash(password);
