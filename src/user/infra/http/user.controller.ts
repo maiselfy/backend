@@ -89,6 +89,6 @@ export class UserController {
     @Res() res: Response,
   ): Promise<Response> {
     await this.deleteUserService.execute(id);
-    return res.status(401).send();
+    return res.status(204).send();
   }
 }
