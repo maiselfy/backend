@@ -33,7 +33,6 @@ class User {
   @OneToMany(
     () => Body,
     body => body.user,
-    { cascade: true },
   )
   bodies: Body[];
 
@@ -45,5 +44,7 @@ class User {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+
+
 }
 export default User;

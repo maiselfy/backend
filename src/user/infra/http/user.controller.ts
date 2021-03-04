@@ -1,6 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -19,12 +22,15 @@ import CreateUserService from '../../services/createUser.service';
 import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO.interface';
 import UpdateUserService from 'src/user/services/updateUser.service';
 import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
+import DeleteUserService from 'src/user/services/deleteUser.service';
+import { DeleteResult } from 'typeorm';
 @Controller('user')
 export class UserController {
   constructor(
     private createUserService: CreateUserService,
     private updateUserAvatarService: UpdateUserAvatarService,
     private updateUserService: UpdateUserService,
+    private deleteUserService: DeleteUserService,
   ) {}
   @Post()
   createUser(
@@ -75,5 +81,14 @@ export class UserController {
       birthdate,
     });
     return updatedUser;
+  }
+
+  @Delete('delete/:id')
+  async deleteUser(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    await this.deleteUserService.execute(id);
+    return res.status(204).send();
   }
 }
