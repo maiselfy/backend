@@ -15,7 +15,7 @@ export default class DeleteHabitService {
       if (!habitExists)
         throw new HttpException(
           'There is no corresponding habit registered for this user.',
-          HttpStatus.CONFLICT,
+          HttpStatus.NOT_FOUND,
         );
       const successfulDelete = await this.habitsRepository.delete(id);
       return successfulDelete;

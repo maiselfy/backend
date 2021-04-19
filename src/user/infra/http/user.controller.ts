@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  HttpCode,
-  HttpStatus,
   Param,
   Patch,
   Post,
@@ -19,7 +17,7 @@ import UploadConfig from '../../../config/upload.config';
 import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
 import { FileInterceptor } from '@nestjs/platform-express';
 import CreateUserService from '../../services/createUser.service';
-import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO.interface';
+import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO';
 import UpdateUserService from 'src/user/services/updateUser.service';
 import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
 import DeleteUserService from 'src/user/services/deleteUser.service';
