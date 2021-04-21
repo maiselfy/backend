@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import HabitCheck from './HabitCheck';
 
 @Entity('habits')
 class Habit {
@@ -33,6 +35,12 @@ class Habit {
 
   @Column()
   pontuation: number;
+
+  @OneToMany(
+    () => HabitCheck,
+    habitCheck => habitCheck.habit,
+  )
+  habitsCheck: HabitCheck[];
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

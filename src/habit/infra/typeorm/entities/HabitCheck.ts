@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import Habit from './Habit';
 
 @Entity('habit_check')
 class HabitCheck {
@@ -18,6 +21,13 @@ class HabitCheck {
 
   @Column()
   date: Date;
+
+  @ManyToOne(
+    () => Habit,
+    habit => habit.habitsCheck,
+  )
+  @JoinColumn({ name: 'habit_id' })
+  habit: Habit;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
