@@ -44,8 +44,31 @@ jobs:
         key: ${{secrets.SSH_KEY}}
         source: ".,!node_modules"
         target: "~/app/backend"
-    
-    
-      
-    #Instalando as dependencias 
-    #executar a build
+        
+    - name: Install  dependencies in Digital Ocean
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd ~/app/backend
+          yarn 
+          
+    - name: Run migrations on Digital Ocean
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd ~/app/backend
+          ./node_modules/.bin/typeorm migration:run
+ 
+    - name: Restart pm2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        script: pm2 restart maiselfapi
