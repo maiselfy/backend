@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import User from 'src/user/infra/typeorm/entities/User';
 import Body from 'src/user/infra/typeorm/entities/Body';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailerConfig } from '../config/mailer/mailer.config';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import Body from 'src/user/infra/typeorm/entities/Body';
       database: process.env.TYPEORM_DATABASE,
       entities: [User, Body],
     }),
+    MailerModule.forRoot(mailerConfig),
     TypeOrmModule.forFeature([User, Body]),
     UserModule,
   ],
