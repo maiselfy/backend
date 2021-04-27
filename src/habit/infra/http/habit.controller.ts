@@ -41,7 +41,7 @@ export class HabitController {
     return habit;
   }
 
-  @Delete('/delete/:id')
+  @Delete('/:id')
   async deleteHabit(
     @Param('id') id: string,
     @Res() res: Response,

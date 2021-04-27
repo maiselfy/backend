@@ -22,7 +22,7 @@ export default class DeleteHabitService {
     } catch {
       throw new HttpException(
         'Sorry, we were unable to remove the habit.',
-        HttpStatus.CONFLICT,
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

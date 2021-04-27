@@ -24,12 +24,12 @@ export class createBodyTable1612489706955 implements MigrationInterface {
           {
             name: 'created_at',
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'updated_at',
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
         ],
       }),
