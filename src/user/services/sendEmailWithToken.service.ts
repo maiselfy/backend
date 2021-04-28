@@ -22,7 +22,7 @@ export class SendEmailWithTokenService {
 
     if (!user) {
       throw new HttpException(
-        'This user does not exist in the our database.',
+        'This email does not exist in the our database.',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -32,8 +32,7 @@ export class SendEmailWithTokenService {
     });
 
     if (userToken) {
-      const id = userToken.id;
-      await this.userTokensRepository.delete(id);
+      await this.userTokensRepository.delete(userToken.id);
     }
 
     const expires_in = addDays(new Date(), 7);
@@ -63,5 +62,7 @@ export class SendEmailWithTokenService {
     };
 
     await this.mailerService.sendMail(mail);
+
+    return userToken;
   }
 }

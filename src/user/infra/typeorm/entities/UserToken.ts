@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -15,6 +16,7 @@ class UserToken {
   user_id: string;
 
   @Column('uuid')
+  @Generated('uuid')
   token: string;
 
   @CreateDateColumn({ type: 'timestamp' })

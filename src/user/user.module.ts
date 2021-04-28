@@ -21,6 +21,7 @@ import DeleteUserService from './services/deleteUser.service';
 import { RecoverPasswordController } from './infra/http/recoverPassword.controller';
 import { SendEmailWithTokenService } from './services/sendEmailWithToken.service';
 import UserToken from './infra/typeorm/entities/UserToken';
+import { ResetPasswordService } from './services/resetPassword.service';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import UserToken from './infra/typeorm/entities/UserToken';
     UpdateUserService,
     DeleteUserService,
     SendEmailWithTokenService,
+    ResetPasswordService,
   ],
 })
 export class UserModule implements NestModule {
