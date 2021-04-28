@@ -7,6 +7,7 @@ import User from 'src/user/infra/typeorm/entities/User';
 import Body from 'src/user/infra/typeorm/entities/Body';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { mailerConfig } from '../config/mailer/mailer.config';
+import UserToken from 'src/user/infra/typeorm/entities/UserToken';
 
 @Module({
   imports: [
@@ -18,10 +19,10 @@ import { mailerConfig } from '../config/mailer/mailer.config';
       username: process.env.TYPEORM_USERNAME,
       password: process.env.TYPEORM_PASSWORD,
       database: process.env.TYPEORM_DATABASE,
-      entities: [User, Body],
+      entities: [User, Body, UserToken],
     }),
     MailerModule.forRoot(mailerConfig),
-    TypeOrmModule.forFeature([User, Body]),
+    TypeOrmModule.forFeature([User, Body, UserToken]),
     UserModule,
   ],
   controllers: [],
