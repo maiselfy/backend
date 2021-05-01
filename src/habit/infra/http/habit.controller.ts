@@ -18,7 +18,6 @@ export class HabitController {
   createHabit(
     @Body()
     {
-      userId,
       name,
       description,
       reminderQuestion,
@@ -29,7 +28,6 @@ export class HabitController {
     }: ICreateHabitDTO,
   ): Promise<Habit> {
     const habit = this.createHabitService.execute({
-      userId,
       name,
       description,
       reminderQuestion,
