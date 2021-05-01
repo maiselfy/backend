@@ -7,7 +7,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.use('/files', expressStatic(uploadConfig.directory));
-  app.enableCors();
+  app.enableCors({
+    origin: ['http://localhost:3000/', 'https://app.maiself.com.br'],
+  });
   await app.listen(3000);
 }
 bootstrap();
