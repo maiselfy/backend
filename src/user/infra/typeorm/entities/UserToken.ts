@@ -19,7 +19,7 @@ class UserToken {
   @Generated('uuid')
   token: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'date' })
   expires_in: Date;
 
   @CreateDateColumn({ type: 'timestamp' })

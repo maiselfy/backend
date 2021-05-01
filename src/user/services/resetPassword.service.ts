@@ -28,7 +28,7 @@ export class ResetPasswordService {
       );
     }
 
-    if (!isAfter(userToken.expires_in, new Date())) {
+    if (!isAfter(new Date(userToken.expires_in), new Date())) {
       throw new HttpException(
         'This token has expired.',
         HttpStatus.UNAUTHORIZED,
