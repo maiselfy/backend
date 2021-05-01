@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import HabitCheck from './HabitCheck';
+import { weekDay } from '../../../dtos/EnumWeekDayDTO';
 
 @Entity('habits')
 class Habit {
@@ -28,7 +29,7 @@ class Habit {
   color: string;
 
   @Column()
-  frequency: string;
+  frequency: weekDay;
 
   @Column()
   reminder: boolean;
