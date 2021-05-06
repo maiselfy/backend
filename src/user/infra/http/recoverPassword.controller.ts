@@ -19,8 +19,8 @@ export class RecoverPasswordController {
   @Post('reset-password/:token')
   resetPassword(
     @Param('token') token: string,
-    @Body() { password }: IRecoverPasswordDTO,
+    @Body() { password, passwordConfirm }: IRecoverPasswordDTO,
   ) {
-    this.resetPasswordService.execute(token, password);
+    this.resetPasswordService.execute(token, password, passwordConfirm);
   }
 }

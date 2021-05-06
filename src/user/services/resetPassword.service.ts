@@ -16,7 +16,7 @@ export class ResetPasswordService {
     private userRepository: Repository<User>,
     @Inject(BCryptHashProvider) private readonly HashProvider: IHashProvider,
   ) {}
-  async execute(token: string, password: string) {
+  async execute(token: string, password: string, passwordConfirm: string) {
     const userToken = await this.userTokensRepository.findOne({
       where: { token },
     });
@@ -28,6 +28,23 @@ export class ResetPasswordService {
       );
     }
 
+    const user = await this.userRepository.findOne({
+      where: { id: userToken.user_id },
+    });
+
+    const user_tokens = await this.userTokensRepository.find({
+      where: { user_id: user.id },
+    });
+
+    user_tokens.map(e => {
+      if (!isAfter(userToken.created_at, e.created_at) && e.token != token) {
+        throw new HttpException(
+          'This token does not active.',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+    });
+
     if (!isAfter(new Date(userToken.expires_in), new Date())) {
       throw new HttpException(
         'This token has expired.',
@@ -35,9 +52,12 @@ export class ResetPasswordService {
       );
     }
 
-    const user = await this.userRepository.findOne({
-      where: { id: userToken.user_id },
-    });
+    if (password != passwordConfirm) {
+      throw new HttpException(
+        'This password does not match.',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
 
     const passwordHash = await this.HashProvider.generateHash(password);
 

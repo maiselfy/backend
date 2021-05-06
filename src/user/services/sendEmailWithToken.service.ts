@@ -31,10 +31,6 @@ export class SendEmailWithTokenService {
       where: { user_id: user.id },
     });
 
-    if (userToken) {
-      await this.userTokensRepository.delete(userToken.id);
-    }
-
     const expires_in = addDays(new Date(), 7);
 
     userToken = this.userTokensRepository.create({
