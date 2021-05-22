@@ -10,7 +10,7 @@ async function bootstrap() {
   app.enableCors({
     origin: ['http://localhost:3000', 'https://app.maiself.com.br'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Accept',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
     credentials: true,
   });
   await app.listen(3333);
