@@ -29,6 +29,7 @@
     "@nestjs/jwt": "^7.2.0",
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/typeorm": "^7.1.5",
+    "@ntegral/nestjs-sendgrid": "^1.0.0",
     "@types/bcryptjs": "^2.4.2",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.21.1",
