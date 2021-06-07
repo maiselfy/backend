@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UserModule } from '../user/user.module';
+import { UserModule } from '../modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import User from 'src/user/infra/typeorm/entities/User';
-import Body from 'src/user/infra/typeorm/entities/Body';
+import User from 'src/modules/user/infra/typeorm/entities/User';
+import Body from 'src/modules/user/infra/typeorm/entities/Body';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { mailerConfig } from '../config/mailer/mailer.config';
-import UserToken from 'src/user/infra/typeorm/entities/UserToken';
+import UserToken from 'src/modules/user/infra/typeorm/entities/UserToken';
 
 @Module({
   imports: [

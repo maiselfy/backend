@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ICreateSessionDTO } from 'src/user/dtos/ICreateSessionDTO';
+import { ICreateSessionDTO } from 'src/modules/user/dtos/ICreateSessionDTO';
 import AuthenticateUserService from '../../services/authenticateUser.service';
 
 @Controller('session')

@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import User from './infra/typeorm/entities/User';
 import Body from './infra/typeorm/entities/Body';
-import { secret, expiresIn } from '../config/jwt/config.jwt';
+import { secret, expiresIn } from '../../config/jwt/config.jwt';
 import { UserController } from './infra/http/user.controller';
 import CreateUserService from './services/createUser.service';
 import UpdateUserService from './services/updateUser.service';
@@ -22,6 +22,7 @@ import { RecoverPasswordController } from './infra/http/recoverPassword.controll
 import { SendEmailWithTokenService } from './services/sendEmailWithToken.service';
 import UserToken from './infra/typeorm/entities/UserToken';
 import { ResetPasswordService } from './services/resetPassword.service';
+import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 
 @Module({
   imports: [
@@ -29,6 +30,9 @@ import { ResetPasswordService } from './services/resetPassword.service';
     JwtModule.register({
       secret: secret,
       signOptions: { expiresIn: expiresIn },
+    }),
+    SendGridModule.forRoot({
+      apiKey: process.env.SENDGRID_API_KEY,
     }),
   ],
   controllers: [UserController, SessionController, RecoverPasswordController],

@@ -15,15 +15,14 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import User from '../typeorm/entities/User';
-import UploadConfig from '../../../config/upload.config';
-import ICreateUserDTO from 'src/user/dtos/ICreateUserDTO';
+import UploadConfig from '../../../../config/upload.config';
+import ICreateUserDTO from 'src/modules/user/dtos/ICreateUserDTO';
 import { FileInterceptor } from '@nestjs/platform-express';
 import CreateUserService from '../../services/createUser.service';
-import IUpdateUserDTO from 'src/user/dtos/IUpdateUserDTO.interface';
-import UpdateUserService from 'src/user/services/updateUser.service';
+import IUpdateUserDTO from 'src/modules/user/dtos/IUpdateUserDTO.interface';
+import UpdateUserService from 'src/modules/user/services/updateUser.service';
 import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
-import DeleteUserService from 'src/user/services/deleteUser.service';
-import { DeleteResult } from 'typeorm';
+import DeleteUserService from 'src/modules/user/services/deleteUser.service';
 @Controller('user')
 export class UserController {
   constructor(
@@ -37,7 +36,7 @@ export class UserController {
     @Body()
     { name, lastname, email, password, birthdate, body }: ICreateUserDTO,
   ): Promise<User> {
-    const user = this.createUserService.execute({
+    return this.createUserService.execute({
       name,
       lastname,
       email,
@@ -45,7 +44,6 @@ export class UserController {
       birthdate,
       body,
     });
-    return user;
   }
 
   @Patch('avatar')
@@ -73,14 +71,13 @@ export class UserController {
     @Param('id') id: string,
     @Body() { name, lastname, email, password, birthdate }: IUpdateUserDTO,
   ): Promise<User> {
-    const updatedUser = this.updateUserService.execute(id, {
+    return this.updateUserService.execute(id, {
       name,
       lastname,
       email,
       password,
       birthdate,
     });
-    return updatedUser;
   }
 
   @Delete('delete/:id')
