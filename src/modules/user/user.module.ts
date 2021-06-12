@@ -52,6 +52,10 @@ export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(EnsureAuthenticatedMiddleware)
-      .forRoutes({ path: 'user/avatar', method: RequestMethod.PATCH });
+      .exclude(
+        { method: RequestMethod.POST, path: 'api/session' },
+        { method: RequestMethod.POST, path: 'api/user' },
+      )
+      .forRoutes('*');
   }
 }

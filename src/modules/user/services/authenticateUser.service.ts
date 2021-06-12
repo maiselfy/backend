@@ -36,7 +36,11 @@ export default class AuthenticateUserService {
         HttpStatus.UNAUTHORIZED,
       );
     }
-    const token = this.jwtService.sign({}, { subject: user.id });
-    return token;
+    return this.jwtService.sign({
+      id: user.id,
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+    });
   }
 }

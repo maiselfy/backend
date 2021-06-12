@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -14,15 +15,18 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+
 import User from '../typeorm/entities/User';
+import { User as UserDecorator } from '../http/decorators/user.decorator';
 import UploadConfig from '../../../../config/upload.config';
 import ICreateUserDTO from 'src/modules/user/dtos/ICreateUserDTO';
-import { FileInterceptor } from '@nestjs/platform-express';
 import CreateUserService from '../../services/createUser.service';
 import IUpdateUserDTO from 'src/modules/user/dtos/IUpdateUserDTO.interface';
 import UpdateUserService from 'src/modules/user/services/updateUser.service';
 import UpdateUserAvatarService from '../../services/updateUserAvatar.service';
 import DeleteUserService from 'src/modules/user/services/deleteUser.service';
+
 @Controller('user')
 export class UserController {
   constructor(
@@ -31,6 +35,12 @@ export class UserController {
     private updateUserService: UpdateUserService,
     private deleteUserService: DeleteUserService,
   ) {}
+
+  @Get('/me')
+  getMe(@UserDecorator() user) {
+    return user;
+  }
+
   @Post()
   createUser(
     @Body()

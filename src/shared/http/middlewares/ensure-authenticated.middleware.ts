@@ -5,7 +5,10 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 interface TokenPayload {
   iat: number;
   exp: number;
-  sub: string;
+  id: string;
+  name: string;
+  lastname: string;
+  email: string;
 }
 export function EnsureAuthenticatedMiddleware(
   req: Request,
@@ -19,8 +22,8 @@ export function EnsureAuthenticatedMiddleware(
   const [, token] = authHeader.split(' ');
   try {
     const decoded = verify(token, secret);
-    const { sub } = decoded as TokenPayload;
-    req.user = { id: sub };
+    const { id, name, lastname, email } = decoded as TokenPayload;
+    req.user = { id, name, lastname, email };
     return next();
   } catch {
     throw new HttpException('Invalid JWT Token', HttpStatus.UNAUTHORIZED);
