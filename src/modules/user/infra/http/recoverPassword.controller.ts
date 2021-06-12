@@ -1,17 +1,17 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
-import IRecoverPasswordDTO from 'src/user/dtos/IRecoverPasswordDTO';
-import ISendEmailWithToken from 'src/user/dtos/ISendEmailWithToken';
-import { ResetPasswordService } from 'src/user/services/resetPassword.service';
-import { SendEmailWithTokenService } from 'src/user/services/sendEmailWithToken.service';
+import IRecoverPasswordDTO from 'src/modules/user/dtos/IRecoverPasswordDTO';
+import ISendEmailWithToken from 'src/modules/user/dtos/ISendEmailWithToken';
+import { ResetPasswordService } from 'src/modules/user/services/resetPassword.service';
+import { SendEmailWithTokenService } from 'src/modules/user/services/sendEmailWithToken.service';
 
-@Controller('recover-password')
+@Controller('forgot-password')
 export class RecoverPasswordController {
   constructor(
     private sendEmailWithTokenService: SendEmailWithTokenService,
     private resetPasswordService: ResetPasswordService,
   ) {}
 
-  @Post('send-token')
+  @Post()
   sendEmail(@Body() { email }: ISendEmailWithToken) {
     return this.sendEmailWithTokenService.execute(email);
   }
