@@ -41,8 +41,8 @@ export default class CreateUserService {
     await this.usersRepository.save(user);
     await this.sendgrid
       .send({
-        to: email, // Change to your recipient
-        from: 'no-reply@maiself.com.br', // Change to your verified sender
+        to: email,
+        from: 'no-reply@maiself.com.br',
         subject: 'Welcome to Maiself',
         templateId: 'd-edce0598398f458692d26ae47ae5dbda',
         dynamicTemplateData: {

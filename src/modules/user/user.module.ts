@@ -32,7 +32,8 @@ import { SendGridModule } from '@ntegral/nestjs-sendgrid';
       signOptions: { expiresIn: expiresIn },
     }),
     SendGridModule.forRoot({
-      apiKey: process.env.SENDGRID_API_KEY,
+      apiKey:
+        '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',
     }),
   ],
   controllers: [UserController, SessionController, RecoverPasswordController],

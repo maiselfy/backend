@@ -4,14 +4,14 @@ import ISendEmailWithToken from 'src/modules/user/dtos/ISendEmailWithToken';
 import { ResetPasswordService } from 'src/modules/user/services/resetPassword.service';
 import { SendEmailWithTokenService } from 'src/modules/user/services/sendEmailWithToken.service';
 
-@Controller('recover-password')
+@Controller('forgot-password')
 export class RecoverPasswordController {
   constructor(
     private sendEmailWithTokenService: SendEmailWithTokenService,
     private resetPasswordService: ResetPasswordService,
   ) {}
 
-  @Post('send-token')
+  @Post()
   sendEmail(@Body() { email }: ISendEmailWithToken) {
     return this.sendEmailWithTokenService.execute(email);
   }

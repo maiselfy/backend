@@ -4,8 +4,7 @@ import { Repository } from 'typeorm';
 import User from '../infra/typeorm/entities/User';
 import UserToken from '../infra/typeorm/entities/UserToken';
 import { addDays } from 'date-fns';
-import * as path from 'path';
-import { MailerService } from '@nestjs-modules/mailer';
+import { InjectSendGrid, SendGridService } from '@ntegral/nestjs-sendgrid';
 
 @Injectable()
 export class SendEmailWithTokenService {
@@ -14,51 +13,44 @@ export class SendEmailWithTokenService {
     private userTokensRepository: Repository<UserToken>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private mailerService: MailerService,
+    @InjectSendGrid() private readonly sendgrid: SendGridService,
   ) {}
 
   async execute(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
+    try {
+      const user = await this.userRepository.findOne({ where: { email } });
 
-    if (!user) {
-      throw new HttpException(
-        'This email does not exist in the our database.',
-        HttpStatus.NOT_FOUND,
-      );
+      if (!user) {
+        throw new HttpException(
+          'This email does not exist in the our database.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      let userToken = await this.userTokensRepository.findOne({
+        where: { user_id: user.id },
+      });
+
+      const expires_in = addDays(new Date(), 7);
+
+      userToken = this.userTokensRepository.create({
+        user_id: user.id,
+        expires_in,
+      });
+
+      await this.userTokensRepository.save(userToken);
+      console.log(process.env.SENDGRID_API_KEY);
+      await this.sendgrid.send({
+        to: user.email,
+        from: 'no-reply@maiself.com.br',
+        subject: 'Maiself - Alteração de senha',
+        templateId: 'd-cb35dfd58fb7480f86cfa62ec1687d83',
+        dynamicTemplateData: { token: userToken.token },
+      });
+
+      return userToken;
+    } catch (error) {
+      console.error(error.response.body);
     }
-
-    let userToken = await this.userTokensRepository.findOne({
-      where: { user_id: user.id },
-    });
-
-    const expires_in = addDays(new Date(), 7);
-
-    userToken = this.userTokensRepository.create({
-      user_id: user.id,
-      expires_in,
-    });
-
-    await this.userTokensRepository.save(userToken);
-
-    const mail = {
-      to: user.email,
-      from: 'noreply@maiself.com',
-      subject: 'Email de confirmação',
-      template: path.resolve(
-        __dirname,
-        '..',
-        '..',
-        '..',
-        'templates',
-        'recover-password',
-      ),
-      context: {
-        token: userToken.token,
-      },
-    };
-
-    await this.mailerService.sendMail(mail);
-
-    return userToken;
   }
 }
