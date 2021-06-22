@@ -44,7 +44,7 @@ export class UserController {
   @Post()
   createUser(
     @Body()
-    { name, lastname, email, password, birthdate, body }: ICreateUserDTO,
+    { name, lastname, email, password, birthdate, username }: ICreateUserDTO,
   ): Promise<User> {
     return this.createUserService.execute({
       name,
@@ -52,7 +52,7 @@ export class UserController {
       email,
       password,
       birthdate,
-      body,
+      username,
     });
   }
 

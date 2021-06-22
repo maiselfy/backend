@@ -20,7 +20,7 @@ export default class CreateUserService {
     email,
     password,
     birthdate,
-    body,
+    username,
   }: ICreateUserDTO): Promise<User> {
     const userExists = await this.usersRepository.findOne({ where: { email } });
     if (userExists) {
@@ -36,7 +36,7 @@ export default class CreateUserService {
       email,
       password: passwordHash,
       birthdate,
-      bodies: [body],
+      username,
     });
     await this.usersRepository.save(user);
     await this.sendgrid

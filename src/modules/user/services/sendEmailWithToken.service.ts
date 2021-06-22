@@ -39,7 +39,6 @@ export class SendEmailWithTokenService {
       });
 
       await this.userTokensRepository.save(userToken);
-      console.log(process.env.SENDGRID_API_KEY);
       await this.sendgrid.send({
         to: user.email,
         from: 'no-reply@maiself.com.br',
