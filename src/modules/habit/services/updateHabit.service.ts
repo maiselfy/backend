@@ -6,43 +6,35 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import User from 'src/modules/user/infra/typeorm/entities/User';
 
 @Injectable()
-export default class CreateHabitService {
+export default class UpdateHabitService {
   constructor(
     @InjectRepository(Habit) private habitsRepository: Repository<Habit>,
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async execute({
-    user_id,
-    name,
-    description,
-    objective,
-    color,
-    buddy_id,
-  }: ICreateHabitDTO): Promise<Habit> {
-    const user = await this.usersRepository.findOne({
-      where: { id: user_id },
+  async execute(
+    id: string,
+    { name, description, objective, color }: ICreateHabitDTO,
+  ): Promise<Habit> {
+    const habit = await this.habitsRepository.findOne({
+      where: { id: id },
     });
 
-    const buddyExists = await this.usersRepository.findOne({
-      where: { id: buddy_id },
-    });
-
-    if (!user || !buddyExists)
+    if (!habit) {
       throw new HttpException(
-        'It is not possible to perform the operation, as there is no corresponding registered user',
+        'This habit does not exist in the our database.',
         HttpStatus.NOT_FOUND,
       );
+    }
 
-    const habit = this.habitsRepository.create({
+    const updatedHabit = this.habitsRepository.merge(habit, {
       name,
       description,
       objective,
       color,
-      buddy_id,
     });
 
-    await this.habitsRepository.save(habit);
+    await this.habitsRepository.save(updatedHabit);
 
     return habit;
   }
