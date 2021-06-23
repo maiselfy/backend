@@ -1,19 +1,21 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
   Put,
-  Req,
   Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 
 import Habit from '../typeorm/entities/Habit';
 import { Habit as HabitDecorator } from '../decorators/habit.decorator';
 import ICreateHabitDTO from '../../dtos/ICreateHabitDTO';
 import CreateHabitService from '../../services/createHabit.service';
 import UpdateHabitService from '../../services/updateHabit.service';
+import DeleteHabitService from '../../services/deleteHabit.service';
 import IUpdateHabitDTO from '../../dtos/IUpdateHabitDTO';
 
 @Controller('habit')
@@ -21,6 +23,7 @@ export default class HabitController {
   constructor(
     private createHabitService: CreateHabitService,
     private updateHabitService: UpdateHabitService,
+    private deleteHabitService: DeleteHabitService,
   ) {}
 
   @Get('/habit')
@@ -54,5 +57,17 @@ export default class HabitController {
       objective,
       color,
     });
+  }
+
+  @Delete('delete/:id')
+  async deleteHabit(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    await this.deleteHabitService.execute(id);
+    return res
+      .status(204)
+      .json({ message: 'Habit has been deleted.' })
+      .send();
   }
 }

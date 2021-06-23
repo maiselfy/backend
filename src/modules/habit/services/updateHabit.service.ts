@@ -1,9 +1,9 @@
 import { Repository } from 'typeorm';
 import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
-import ICreateHabitDTO from '../dtos/ICreateHabitDTO';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import User from 'src/modules/user/infra/typeorm/entities/User';
+import IUpdateHabitDTO from '../dtos/IUpdateHabitDTO';
 
 @Injectable()
 export default class UpdateHabitService {
@@ -14,7 +14,7 @@ export default class UpdateHabitService {
 
   async execute(
     id: string,
-    { name, description, objective, color }: ICreateHabitDTO,
+    { name, description, objective, color }: IUpdateHabitDTO,
   ): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
       where: { id: id },
