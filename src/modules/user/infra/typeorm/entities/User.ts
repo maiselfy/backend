@@ -28,6 +28,9 @@ class User {
   lastname: string;
 
   @Column()
+  username: string;
+
+  @Column()
   birthdate: Date;
 
   @OneToMany(
