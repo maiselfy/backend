@@ -26,7 +26,7 @@ export default class UpdateHabitService {
       return successfulDelete;
     } catch {
       throw new HttpException(
-        'Sorry, we were unable to remove the user.',
+        'Sorry, we were unable to remove the habit.',
         HttpStatus.CONFLICT,
       );
     }

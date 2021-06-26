@@ -14,7 +14,7 @@ class Habit {
   id: string;
 
   @Column('uuid')
-  userId: string;
+  user_id: string;
 
   @Column()
   name: string;
