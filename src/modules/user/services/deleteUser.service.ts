@@ -15,7 +15,7 @@ export default class DeleteUserService {
       if (!userExists) {
         throw new HttpException(
           'This user does not exist in our database.',
-          HttpStatus.CONFLICT,
+          HttpStatus.NOT_FOUND,
         );
       }
       const successfulDelete = await this.usersRepository.delete(id);
@@ -23,7 +23,7 @@ export default class DeleteUserService {
     } catch {
       throw new HttpException(
         'Sorry, we were unable to remove the user.',
-        HttpStatus.CONFLICT,
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

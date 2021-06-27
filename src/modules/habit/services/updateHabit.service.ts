@@ -14,7 +14,7 @@ export default class UpdateHabitService {
 
   async execute(
     id: string,
-    { name, description, objective, color }: IUpdateHabitDTO,
+    { name, description, objective, color, buddy_id }: IUpdateHabitDTO,
   ): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
       where: { id: id },
@@ -27,11 +27,23 @@ export default class UpdateHabitService {
       );
     }
 
+    const buddyExists = this.usersRepository.findOne({
+      where: { id: buddy_id },
+    });
+
+    if (!buddyExists) {
+      throw new HttpException(
+        'It is not possible to assign this habit to this buddy, as there is no corresponding user.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     const updatedHabit = this.habitsRepository.merge(habit, {
       name,
       description,
       objective,
       color,
+      buddy_id,
     });
 
     await this.habitsRepository.save(updatedHabit);

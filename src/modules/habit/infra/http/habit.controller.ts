@@ -51,13 +51,14 @@ export default class HabitController {
   @Put(':id')
   updateHabit(
     @Param('id') id: string,
-    @Body() { name, description, objective, color }: IUpdateHabitDTO,
+    @Body() { name, description, objective, color, buddy_id }: IUpdateHabitDTO,
   ): Promise<Habit> {
     return this.updateHabitService.execute(id, {
       name,
       description,
       objective,
       color,
+      buddy_id,
     });
   }
 
@@ -76,5 +77,17 @@ export default class HabitController {
   @Get('/')
   listHabitsForUser(@Param('id') id: string): Promise<Habit[]> {
     return this.listHabitsService.execute(id);
+  }
+
+  @Delete('delete/:id')
+  async deleteHabitOfUser(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    await this.deleteHabitService.execute(id);
+    return res
+      .status(204)
+      .json({ message: 'Habit of user has been deleted.' })
+      .send();
   }
 }

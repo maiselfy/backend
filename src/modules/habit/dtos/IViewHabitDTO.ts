@@ -1,4 +1,4 @@
-export default interface IUpdateHabitDTO {
+export default interface IViewHabitDTO {
   name: string;
   description: string;
   objective: string;

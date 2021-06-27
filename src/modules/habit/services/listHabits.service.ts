@@ -25,6 +25,15 @@ export default class ListHabitsService {
       where: { user_id: id },
     });
 
+    const haveHabits = allHabits.length;
+
+    if (haveHabits === 0 || null) {
+      throw new HttpException(
+        'Sorry, this user has no registered habits.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     return allHabits;
   }
 }
