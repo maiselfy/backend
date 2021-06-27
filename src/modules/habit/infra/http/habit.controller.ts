@@ -17,6 +17,7 @@ import CreateHabitService from '../../services/createHabit.service';
 import UpdateHabitService from '../../services/updateHabit.service';
 import DeleteHabitService from '../../services/deleteHabit.service';
 import ListHabitsService from '../../services/listHabits.service';
+import ViewHabitService from '../../services/viewHabit.service';
 import IUpdateHabitDTO from '../../dtos/IUpdateHabitDTO';
 
 @Controller('habit')
@@ -26,6 +27,7 @@ export default class HabitController {
     private updateHabitService: UpdateHabitService,
     private deleteHabitService: DeleteHabitService,
     private listHabitsService: ListHabitsService,
+    private viewHabitService: ViewHabitService,
   ) {}
 
   @Get('/habit')
@@ -89,5 +91,13 @@ export default class HabitController {
       .status(204)
       .json({ message: 'Habit of user has been deleted.' })
       .send();
+  }
+
+  @Get('/')
+  viewHabitOfUser(
+    @Param('id') id: string,
+    @Param('user_id') user_id: string,
+  ): Promise<Habit> {
+    return this.viewHabitService.execute(user_id, id);
   }
 }
