@@ -24,15 +24,24 @@ export default class CreateHabitService {
       where: { id: user_id },
     });
 
-    const buddyExists = await this.usersRepository.findOne({
-      where: { id: buddy_id },
-    });
-
-    if (!user || !buddyExists)
+    if (!user)
       throw new HttpException(
         'It is not possible to perform the operation, as there is no corresponding registered user',
         HttpStatus.NOT_FOUND,
       );
+
+    if (buddy_id !== null) {
+      const buddy = await this.usersRepository.findOne({
+        where: { id: buddy_id },
+      });
+
+      if (!buddy) {
+        throw new HttpException(
+          'It is not possible to perform an operation, as there is no corresponding registered user to be used as a buddy',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+    }
 
     const habit = this.habitsRepository.create({
       name,
