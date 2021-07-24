@@ -1,47 +1,28 @@
 import User from '../../../../user/infra/typeorm/entities/User';
+import Habit from '../../typeorm/entities/Habit';
+
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import HabitDayCheck from './HabitDayCheck';
 
 @Entity('habits')
-class Habit {
+class HabitDayCheck {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('uuid')
   user_id: string;
 
-  @Column()
-  name: string;
+  @Column('uuid')
+  habit_id: string;
 
   @Column()
-  description: string;
-
-  @Column()
-  objective: string;
-
-  @Column()
-  color: string;
-
-  @Column()
-  buddy_id: string;
-
-  @OneToOne(() => User)
-  @JoinColumn({ name: 'buddy_id' })
-  buddy: User;
-
-  @OneToMany(
-    () => HabitDayCheck,
-    habit => habit.habit_id,
-  )
-  frequency: HabitDayCheck[];
+  date: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
@@ -50,4 +31,4 @@ class Habit {
   updated_at: Date;
 }
 
-export default Habit;
+export default HabitDayCheck;

@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import User from 'src/modules/user/infra/typeorm/entities/User';
 import Body from 'src/modules/user/infra/typeorm/entities/Body';
 import UserToken from 'src/modules/user/infra/typeorm/entities/UserToken';
+import HabitDayCheck from 'src/modules/habit/infra/typeorm/entities/HabitDayCheck';
+import { HabitModule } from 'src/modules/habit/habit.module';
 
 @Module({
   imports: [
@@ -17,10 +19,11 @@ import UserToken from 'src/modules/user/infra/typeorm/entities/UserToken';
       username: process.env.TYPEORM_USERNAME,
       password: process.env.TYPEORM_PASSWORD,
       database: process.env.TYPEORM_DATABASE,
-      entities: [User, Body, UserToken],
+      entities: [User, Body, UserToken, HabitDayCheck],
     }),
-    TypeOrmModule.forFeature([User, Body, UserToken]),
+    //TypeOrmModule.forFeature([User, Body, UserToken, HabitDayCheck]),
     UserModule,
+    HabitModule,
   ],
   controllers: [],
   providers: [AppService],
