@@ -1,7 +1,10 @@
+import User from '../../../../user/infra/typeorm/entities/User';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -11,7 +14,7 @@ class Habit {
   id: string;
 
   @Column('uuid')
-  userId: string;
+  user_id: string;
 
   @Column()
   name: string;
@@ -20,19 +23,17 @@ class Habit {
   description: string;
 
   @Column()
-  reminderQuestion: string;
+  objective: string;
 
   @Column()
   color: string;
 
   @Column()
-  frequency: string;
+  buddy_id: string;
 
-  @Column()
-  reminder: boolean;
-
-  @Column()
-  pontuation: number;
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'buddy_id' })
+  buddy: User;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

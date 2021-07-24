@@ -1,5 +1,4 @@
-export default interface ICreateHabitDTO {
-  user_id: string;
+export default interface IUpdateHabitDTO {
   name: string;
   description: string;
   objective: string;

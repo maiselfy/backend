@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   Patch,
   Post,
@@ -96,6 +94,9 @@ export class UserController {
     @Res() res: Response,
   ): Promise<Response> {
     await this.deleteUserService.execute(id);
-    return res.status(204).send();
+    return res
+      .status(204)
+      .json({ message: 'User has been deleted.' })
+      .send();
   }
 }
