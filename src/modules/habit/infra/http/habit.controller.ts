@@ -50,12 +50,13 @@ export default class HabitController {
     });
   }
 
-  @Put(':id')
+  @Put('edit/:id/:user_id')
   updateHabit(
     @Param('id') id: string,
+    @Param('user_id') user_id: string,
     @Body() { name, description, objective, color, buddy_id }: IUpdateHabitDTO,
   ): Promise<Habit> {
-    return this.updateHabitService.execute(id, {
+    return this.updateHabitService.execute(id, user_id, {
       name,
       description,
       objective,
@@ -64,36 +65,25 @@ export default class HabitController {
     });
   }
 
-  @Delete('delete/:id')
+  @Delete('delete/:id/:user_id')
   async deleteHabit(
     @Param('id') id: string,
+    @Param('user_id') user_id: string,
     @Res() res: Response,
   ): Promise<Response> {
-    await this.deleteHabitService.execute(id);
+    await this.deleteHabitService.execute(id, user_id);
     return res
       .status(204)
       .json({ message: 'Habit has been deleted.' })
       .send();
   }
 
-  @Get('/')
+  @Get('list/:id')
   listHabitsForUser(@Param('id') id: string): Promise<Habit[]> {
     return this.listHabitsService.execute(id);
   }
 
-  @Delete('delete/:id')
-  async deleteHabitOfUser(
-    @Param('id') id: string,
-    @Res() res: Response,
-  ): Promise<Response> {
-    await this.deleteHabitService.execute(id);
-    return res
-      .status(204)
-      .json({ message: 'Habit of user has been deleted.' })
-      .send();
-  }
-
-  @Get('/')
+  @Get('retrieve/id')
   viewHabitOfUser(
     @Param('id') id: string,
     @Param('user_id') user_id: string,

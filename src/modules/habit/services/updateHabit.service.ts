@@ -14,6 +14,7 @@ export default class UpdateHabitService {
 
   async execute(
     id: string,
+    user_id: string,
     { name, description, objective, color, buddy_id }: IUpdateHabitDTO,
   ): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
@@ -24,6 +25,17 @@ export default class UpdateHabitService {
       throw new HttpException(
         'This habit does not exist in the our database.',
         HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const isTheUserHabit = await this.habitsRepository.findOne({
+      where: { user_id: user_id },
+    });
+
+    if (!isTheUserHabit) {
+      throw new HttpException(
+        'There is no corresponding habit for this user',
+        HttpStatus.CONFLICT,
       );
     }
 
