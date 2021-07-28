@@ -71,11 +71,10 @@ export default class HabitController {
     @Param('user_id') user_id: string,
     @Res() res: Response,
   ): Promise<Response> {
-    await this.deleteHabitService.execute(id, user_id);
-    return res
-      .status(204)
-      .json({ message: 'Habit has been deleted.' })
-      .send();
+    const successfulDelete = await this.deleteHabitService.execute(id, user_id);
+    if (successfulDelete.valueOf()) {
+      return res.status(204).send({ message: 'Habit has been deleted.' });
+    }
   }
 
   @Get('list/:id')
@@ -83,7 +82,7 @@ export default class HabitController {
     return this.listHabitsService.execute(id);
   }
 
-  @Get('retrieve/id')
+  @Get('retrieve/:user_id/:id')
   viewHabitOfUser(
     @Param('id') id: string,
     @Param('user_id') user_id: string,

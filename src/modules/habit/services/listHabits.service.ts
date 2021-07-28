@@ -12,15 +12,6 @@ export default class ListHabitsService {
   ) {}
 
   async execute(id: string): Promise<Habit[]> {
-    const user = await this.usersRepository.findOne({ where: { id: id } });
-
-    if (!user) {
-      throw new HttpException(
-        'It is not possible to perform the operation, as there is no corresponding registered user',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
     const allHabits = await this.habitsRepository.find({
       where: { user_id: id },
     });
