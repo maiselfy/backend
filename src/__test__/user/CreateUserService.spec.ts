@@ -105,7 +105,7 @@ describe('Create User', () => {
   });
 
   it('Should be not able create user', async () => {
-    jest.spyOn(usersRepository, 'findOne').mockRejectedValue(new Error());
+    jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
     const data: ICreateUserDTO = {
       name: 'namefield',
       username: 'usernamefield',
