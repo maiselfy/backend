@@ -10,22 +10,13 @@ export default class ViewHabitService {
   ) {}
 
   async execute(user_id: string, id: string): Promise<Habit> {
-    const habitsOfUser = await this.habitsRepository.find({
-      where: { user_id: user_id },
+    const habit = await this.habitsRepository.findOne({
+      where: { id: id, user_id: user_id },
     });
-
-    if (habitsOfUser.length === 0 || null) {
-      throw new HttpException(
-        'Sorry, this user has no registered habits.',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    const habit = await this.habitsRepository.findOne({ where: { id: id } });
 
     if (!habit) {
       throw new HttpException(
-        'This habit does not exist in the our database.',
+        'There is no habit for this user registered in our database',
         HttpStatus.NOT_FOUND,
       );
     }

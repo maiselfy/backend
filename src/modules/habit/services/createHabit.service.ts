@@ -30,10 +30,13 @@ export default class CreateHabitService {
         HttpStatus.NOT_FOUND,
       );
 
-    if (buddy_id !== null) {
+    if (buddy_id != null) {
       const buddy = await this.usersRepository.findOne({
         where: { id: buddy_id },
       });
+
+      console.log('Buddy: ');
+      console.log(buddy);
 
       if (!buddy) {
         throw new HttpException(
@@ -44,6 +47,7 @@ export default class CreateHabitService {
     }
 
     const habit = this.habitsRepository.create({
+      user_id,
       name,
       description,
       objective,

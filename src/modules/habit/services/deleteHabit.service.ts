@@ -9,7 +9,7 @@ export default class DeleteHabitService {
     @InjectRepository(Habit) private habitsRepository: Repository<Habit>,
   ) {}
 
-  async execute(id: string, user_id: string): Promise<DeleteResult> {
+  async execute(id: string, user_id: string): Promise<boolean> {
     try {
       const habit = await this.habitsRepository.findOne({
         where: { id: id, user_id: user_id },
@@ -21,8 +21,15 @@ export default class DeleteHabitService {
           HttpStatus.NOT_FOUND,
         );
       }
+      const successfulDelete = await this.habitsRepository.delete(id);
 
-      return await this.habitsRepository.delete(id);
+      if (
+        (successfulDelete.raw == 0 || successfulDelete.raw == null) &&
+        successfulDelete.affected == 1
+      ) {
+        return true;
+      }
+      return false;
     } catch {
       throw new HttpException(
         'Sorry, we were unable to remove the habit.',
