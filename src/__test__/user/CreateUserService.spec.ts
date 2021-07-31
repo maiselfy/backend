@@ -6,51 +6,56 @@ import CreateUserService from '../../modules/user/services/createUser.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import ICreateUserDTO from '../../modules/user/dtos/ICreateUserDTO';
 
-const userCreatedEntityList: Array<User> = [
-  new User({
-    name: 'namefield',
-    username: 'usernamefield',
-    lastname: 'lastnamefield',
-    email: 'emailfield@gmail.com',
-    password: 'qwe123',
-    birthdate: new Date(),
-  }),
-  new User({
-    name: 'namefield2',
-    username: 'usernamefield2',
-    lastname: 'lastnamefield2',
-    email: 'emailfail2@gmail.com',
-    password: 'qwe1232',
-    birthdate: new Date(),
-  }),
-];
-
-const emailCreateUserSend = {
-  to: userCreatedEntityList[0].email,
-  from: 'no-reply@maiself.com.br',
-  subject: 'Welcome to Maiself',
-  templateId: 'd-edce0598398f458692d26ae47ae5dbda',
-  dynamicTemplateData: {
-    first_name: userCreatedEntityList[0].name,
-  },
-};
-
 describe('Create User', () => {
-  let usersRepository: Repository<User>;
-  let createUserService: CreateUserService;
+  const userCreatedEntityList: Array<User> = [
+    new User({
+      name: 'namefield',
+      username: 'usernamefield',
+      lastname: 'lastnamefield',
+      email: 'emailfield@gmail.com',
+      password: 'qwe123',
+      birthdate: new Date(),
+    }),
+    new User({
+      name: 'namefield2',
+      username: 'usernamefield2',
+      lastname: 'lastnamefield2',
+      email: 'emailfield2@gmail.com',
+      password: 'qwe1232',
+      birthdate: new Date(),
+    }),
+  ];
+
+  const emailCreateUserSend = {
+    to: userCreatedEntityList[0].email,
+    from: 'no-reply@maiself.com.br',
+    subject: 'Welcome to Maiself',
+    templateId: 'd-edce0598398f458692d26ae47ae5dbda',
+    dynamicTemplateData: {
+      first_name: userCreatedEntityList[0].name,
+    },
+  };
 
   const hashProvider = () => {
     return {
-      generateHash: jest.fn(),
+      generateHash: jest
+        .fn()
+        .mockReturnValue(
+          '8A085DFC3E5BEF71F611D372D8C0040E9A525F08B9B53DE9F0804946218E0FB8',
+        ),
       compareHash: jest.fn(),
     };
   };
+
+  let usersRepository: Repository<User>;
+  let createUserService: CreateUserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         SendGridModule.forRoot({
-          apiKey: 'SG.apifake',
+          apiKey:
+            'SG.J8xI-wBDSc2eP-m0Cal9Gw.wmeCNr-O95f6j-DdM8q2994dTkVBrslj2n1Gn6XS_A',
         }),
       ],
       providers: [
@@ -60,11 +65,8 @@ describe('Create User', () => {
           provide: getRepositoryToken(User),
           useValue: {
             findOne: jest.fn(),
-            find: jest.fn(),
             create: jest.fn().mockReturnValue(userCreatedEntityList[0]),
             save: jest.fn().mockResolvedValue(userCreatedEntityList[0]),
-            createQueryBuilder: jest.fn(),
-            delete: jest.fn(),
           },
         },
         {
@@ -104,14 +106,59 @@ describe('Create User', () => {
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
   });
 
-  it('Should be not able create user', async () => {
+  it('Should be not able create user what exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
+
     const data: ICreateUserDTO = {
       name: 'namefield',
       username: 'usernamefield',
       lastname: 'lastnamefield',
       email: 'emailfield@gmail.com',
       password: 'qwe123',
+      birthdate: new Date(),
+    };
+
+    expect(createUserService.execute(data)).rejects.toThrowError();
+    expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+    expect(usersRepository.create).toHaveBeenCalledTimes(0);
+    expect(usersRepository.save).toHaveBeenCalledTimes(0);
+  });
+
+  it('Should be able create other user', async () => {
+    jest
+      .spyOn(usersRepository, 'create')
+      .mockReturnValueOnce(userCreatedEntityList[1]);
+
+    jest
+      .spyOn(usersRepository, 'save')
+      .mockResolvedValueOnce(userCreatedEntityList[1]);
+
+    const data: ICreateUserDTO = {
+      name: 'namefield2',
+      username: 'usernamefield2',
+      lastname: 'lastnamefield2',
+      email: 'emailfield2@gmail.com',
+      password: 'qwe1232',
+      birthdate: new Date(),
+    };
+
+    const result = await createUserService.execute(data);
+
+    expect(result).toEqual(userCreatedEntityList[1]);
+    expect(usersRepository.create).toHaveBeenCalledTimes(1);
+    expect(usersRepository.save).toHaveBeenCalledTimes(1);
+    expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should be not able create other user what exists', async () => {
+    jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
+
+    const data: ICreateUserDTO = {
+      name: 'namefield2',
+      username: 'usernamefield2',
+      lastname: 'lastnamefield2',
+      email: 'emailfield2@gmail.com',
+      password: 'qwe1232',
       birthdate: new Date(),
     };
 
