@@ -4,9 +4,11 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import HabitDayCheck from './HabitDayCheck';
 
 @Entity('habits')
 class Habit {
@@ -34,6 +36,12 @@ class Habit {
   @OneToOne(() => User)
   @JoinColumn({ name: 'buddy_id' })
   buddy: User;
+
+  @OneToMany(
+    () => HabitDayCheck,
+    habit => habit.habit_id,
+  )
+  frequency: HabitDayCheck[];
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

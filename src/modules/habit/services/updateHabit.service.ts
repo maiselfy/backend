@@ -14,10 +14,11 @@ export default class UpdateHabitService {
 
   async execute(
     id: string,
+    user_id: string,
     { name, description, objective, color, buddy_id }: IUpdateHabitDTO,
   ): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
-      where: { id: id },
+      where: { id: id, user_id: user_id },
     });
 
     if (!habit) {
@@ -28,8 +29,10 @@ export default class UpdateHabitService {
     }
 
     const buddyExists = this.usersRepository.findOne({
-      where: { id: buddy_id },
+      where: { buddy_id: habit.buddy_id },
     });
+
+    console.log(buddyExists);
 
     if (!buddyExists) {
       throw new HttpException(
