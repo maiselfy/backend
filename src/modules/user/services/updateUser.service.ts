@@ -25,6 +25,7 @@ export default class UpdateUserService {
       );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const emailExists = await this.usersRepository.findOne({
       where: { email },
     });
