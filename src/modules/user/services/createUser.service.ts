@@ -39,19 +39,19 @@ export default class CreateUserService {
       username,
     });
     await this.usersRepository.save(user);
-    // await this.sendgrid
-    //   .send({
-    //     to: email,
-    //     from: 'no-reply@maiself.com.br',
-    //     subject: 'Welcome to Maiself',
-    //     templateId: 'd-edce0598398f458692d26ae47ae5dbda',
-    //     dynamicTemplateData: {
-    //       first_name: name,
-    //     },
-    //   })
-    //   .catch(error => {
-    //     console.error(error.response.body);
-    //   });
+    await this.sendgrid
+      .send({
+        to: email,
+        from: 'no-reply@maiself.com.br',
+        subject: 'Welcome to Maiself',
+        templateId: 'd-edce0598398f458692d26ae47ae5dbda',
+        dynamicTemplateData: {
+          first_name: name,
+        },
+      })
+      .catch(error => {
+        console.error(error.response.body);
+      });
     return user;
   }
 }
