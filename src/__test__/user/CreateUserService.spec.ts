@@ -60,7 +60,6 @@ describe('Create User', () => {
       ],
       providers: [
         CreateUserService,
-        SendGridService,
         {
           provide: getRepositoryToken(User),
           useValue: {
