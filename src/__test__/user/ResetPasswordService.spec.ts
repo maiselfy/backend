@@ -5,7 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ResetPasswordService } from '../../modules/user/services/resetPassword.service';
 import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
 
-describe('Authenticate User', () => {
+describe('Reset Password', () => {
   const userTokenList: Array<UserToken> = [
     new UserToken({
       token: '96070bed-c317-4132-ab3c-2ed4bacc9124',
