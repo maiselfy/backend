@@ -25,15 +25,16 @@ export default class UpdateUserService {
       );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const emailExists = await this.usersRepository.findOne({
       where: { email },
     });
-    if (emailExists) {
-      throw new HttpException(
-        'The email already is used by another user.',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    // if (emailExists) {
+    //   throw new HttpException(
+    //     'The email already is used by another user.',
+    //     HttpStatus.UNAUTHORIZED,
+    //   );
+    // }
 
     const passwordHash = await this.HashProvider.generateHash(password);
 
