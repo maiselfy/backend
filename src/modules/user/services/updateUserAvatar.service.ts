@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { join } from 'path';
 import User from '../infra/typeorm/entities/User';
-import uploadConfig from 'src/config/upload.config';
+import uploadConfig from '../../../config/upload.config';
 import { promises } from 'fs';
 
 interface Request {
