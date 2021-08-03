@@ -3,7 +3,7 @@ import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
 import ICreateHabitDTO from '../dtos/ICreateHabitDTO';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../user/infra/typeorm/entities/User';
 
 @Injectable()
 export default class CreateHabitService {
@@ -34,9 +34,6 @@ export default class CreateHabitService {
       const buddy = await this.usersRepository.findOne({
         where: { id: buddy_id },
       });
-
-      console.log('Buddy: ');
-      console.log(buddy);
 
       if (!buddy) {
         throw new HttpException(
