@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../user/infra/typeorm/entities/User';
 import IUpdateHabitDTO from '../dtos/IUpdateHabitDTO';
 
 @Injectable()

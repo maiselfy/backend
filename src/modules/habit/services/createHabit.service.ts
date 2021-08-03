@@ -35,9 +35,6 @@ export default class CreateHabitService {
         where: { id: buddy_id },
       });
 
-      console.log('Buddy: ');
-      console.log(buddy);
-
       if (!buddy) {
         throw new HttpException(
           'It is not possible to perform an operation, as there is no corresponding registered user to be used as a buddy',
