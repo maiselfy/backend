@@ -17,40 +17,58 @@ export default class UpdateHabitService {
     user_id: string,
     { name, description, objective, color, buddy_id }: IUpdateHabitDTO,
   ): Promise<Habit> {
-    const habit = await this.habitsRepository.findOne({
-      where: { id: id, user_id: user_id },
-    });
+    try {
+      const habit = await this.habitsRepository.findOne({
+        where: { id: id },
+      });
 
-    if (!habit) {
+      if (!habit) {
+        throw new HttpException(
+          'This habit does not exist in the our database.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const isTheUserHabit = await this.habitsRepository.findOne({
+        where: { user_id },
+      });
+
+      if (!isTheUserHabit) {
+        throw new HttpException(
+          'There is no corresponding habit for this user',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      if (habit.buddy_id != buddy_id) {
+        const buddyExists = this.usersRepository.findOne({
+          where: { id: buddy_id },
+        });
+
+        if (!buddyExists) {
+          throw new HttpException(
+            'It is not possible to assign this habit to this buddy, as there is no corresponding user.',
+            HttpStatus.NOT_FOUND,
+          );
+        }
+      }
+
+      const updatedHabit = this.habitsRepository.merge(habit, {
+        name,
+        description,
+        objective,
+        color,
+        buddy_id,
+      });
+
+      await this.habitsRepository.save(updatedHabit);
+
+      return habit;
+    } catch {
       throw new HttpException(
-        'This habit does not exist in the our database.',
-        HttpStatus.NOT_FOUND,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    const buddyExists = this.usersRepository.findOne({
-      where: { buddy_id: habit.buddy_id },
-    });
-
-    console.log(buddyExists);
-
-    if (!buddyExists) {
-      throw new HttpException(
-        'It is not possible to assign this habit to this buddy, as there is no corresponding user.',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    const updatedHabit = this.habitsRepository.merge(habit, {
-      name,
-      description,
-      objective,
-      color,
-      buddy_id,
-    });
-
-    await this.habitsRepository.save(updatedHabit);
-
-    return habit;
   }
 }

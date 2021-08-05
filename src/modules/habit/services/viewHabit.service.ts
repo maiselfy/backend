@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import Habit from '../infra/typeorm/entities/Habit';
 
 @Injectable()
@@ -9,15 +9,26 @@ export default class ViewHabitService {
     @InjectRepository(Habit) private habitsRepository: Repository<Habit>,
   ) {}
 
-  async execute(user_id: string, id: string): Promise<Habit> {
+  async execute(id: string, user_id: string): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
-      where: { id: id, user_id: user_id },
+      where: { id: id },
     });
 
     if (!habit) {
       throw new HttpException(
-        'There is no habit for this user registered in our database',
+        'This habit does not exist in the our database.',
         HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const isTheUserHabit = await this.habitsRepository.findOne({
+      where: { user_id },
+    });
+
+    if (!isTheUserHabit) {
+      throw new HttpException(
+        'There is no corresponding habit for this user',
+        HttpStatus.UNAUTHORIZED,
       );
     }
 
