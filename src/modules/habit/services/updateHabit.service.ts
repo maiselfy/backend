@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../user/infra/typeorm/entities/User';
 import IUpdateHabitDTO from '../dtos/IUpdateHabitDTO';
 
 @Injectable()
@@ -18,7 +18,7 @@ export default class UpdateHabitService {
     { name, description, objective, color, buddy_id }: IUpdateHabitDTO,
   ): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
-      where: { id: id },
+      where: { id: id, user_id: user_id },
     });
 
     if (!habit) {
@@ -28,20 +28,11 @@ export default class UpdateHabitService {
       );
     }
 
-    const isTheUserHabit = await this.habitsRepository.findOne({
-      where: { user_id: user_id },
-    });
-
-    if (!isTheUserHabit) {
-      throw new HttpException(
-        'There is no corresponding habit for this user',
-        HttpStatus.CONFLICT,
-      );
-    }
-
     const buddyExists = this.usersRepository.findOne({
-      where: { id: buddy_id },
+      where: { buddy_id: habit.buddy_id },
     });
+
+    console.log(buddyExists);
 
     if (!buddyExists) {
       throw new HttpException(

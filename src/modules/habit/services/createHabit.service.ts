@@ -3,7 +3,7 @@ import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
 import ICreateHabitDTO from '../dtos/ICreateHabitDTO';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../user/infra/typeorm/entities/User';
 
 @Injectable()
 export default class CreateHabitService {
@@ -30,7 +30,7 @@ export default class CreateHabitService {
         HttpStatus.NOT_FOUND,
       );
 
-    if (buddy_id !== null) {
+    if (buddy_id != null) {
       const buddy = await this.usersRepository.findOne({
         where: { id: buddy_id },
       });
@@ -44,6 +44,7 @@ export default class CreateHabitService {
     }
 
     const habit = this.habitsRepository.create({
+      user_id,
       name,
       description,
       objective,
