@@ -16,31 +16,38 @@ export default class AuthenticateUserService {
   ) {}
 
   async execute({ email, password }: ICreateSessionDTO) {
-    const user = await this.usersRepository.findOne({ where: { email } });
+    try {
+      const user = await this.usersRepository.findOne({ where: { email } });
 
-    if (!user) {
+      if (!user) {
+        throw new HttpException(
+          'This email does not exist in the our database.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const verifyUserPassword = await this.HashProvider.compareHash(
+        password,
+        user.password,
+      );
+
+      if (!verifyUserPassword) {
+        throw new HttpException(
+          'Password does not match',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      return this.jwtService.sign({
+        id: user.id,
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+      });
+    } catch {
       throw new HttpException(
-        'This email does not exist in the our database.',
-        HttpStatus.NOT_FOUND,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    const verifyUserPassword = await this.HashProvider.compareHash(
-      password,
-      user.password,
-    );
-
-    if (!verifyUserPassword) {
-      throw new HttpException(
-        'Password does not match',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-    return this.jwtService.sign({
-      id: user.id,
-      name: user.name,
-      lastname: user.lastname,
-      email: user.email,
-    });
   }
 }
