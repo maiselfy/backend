@@ -49,7 +49,10 @@ export class SendEmailWithTokenService {
 
       return userToken;
     } catch (error) {
-      console.error(error.response.body);
+      throw new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

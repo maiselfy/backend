@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import User from '../infra/typeorm/entities/User';
 
 @Injectable()
@@ -9,9 +9,12 @@ export default class DeleteUserService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async execute(id: string): Promise<DeleteResult> {
+  async execute(id: string): Promise<boolean> {
     try {
-      const userExists = await this.usersRepository.findOne(id);
+      const userExists = await this.usersRepository.findOne({
+        where: { id: id },
+      });
+
       if (!userExists) {
         throw new HttpException(
           'This user does not exist in our database.',
@@ -19,10 +22,17 @@ export default class DeleteUserService {
         );
       }
       const successfulDelete = await this.usersRepository.delete(id);
-      return successfulDelete;
+
+      if (
+        (successfulDelete.raw == 0 || successfulDelete.raw == null) &&
+        successfulDelete.affected == 1
+      ) {
+        return true;
+      }
+      return false;
     } catch {
       throw new HttpException(
-        'Sorry, we were unable to remove the user.',
+        'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
       );
     }

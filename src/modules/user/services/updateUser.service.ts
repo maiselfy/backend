@@ -15,38 +15,63 @@ export default class UpdateUserService {
 
   async execute(
     id: string,
-    { name, lastname, email, password, birthdate }: IUpdateUserDTO,
+    { name, lastname, username, email, password, birthdate }: IUpdateUserDTO,
   ): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
-    if (!user) {
+    try {
+      const user = await this.usersRepository.findOne({ where: { id } });
+
+      if (!user) {
+        throw new HttpException(
+          'This user does not exist in the our database.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      if (user.email != email) {
+        const emailExists = await this.usersRepository.findOne({
+          where: { email },
+        });
+
+        if (emailExists) {
+          throw new HttpException(
+            'The email already is used by another user, please choose a different.',
+            HttpStatus.CONFLICT,
+          );
+        }
+      }
+
+      if (user.username != username) {
+        const usernameExists = await this.usersRepository.findOne({
+          where: { username },
+        });
+
+        if (usernameExists) {
+          throw new HttpException(
+            'The username already is used by another user, please choose a different.',
+            HttpStatus.CONFLICT,
+          );
+        }
+      }
+
+      const passwordHash = await this.HashProvider.generateHash(password);
+
+      const updatedUser = this.usersRepository.merge(user, {
+        name,
+        lastname,
+        username,
+        email,
+        password: passwordHash,
+        birthdate,
+      });
+
+      await this.usersRepository.save(updatedUser);
+
+      return updatedUser;
+    } catch {
       throw new HttpException(
-        'This user does not exist in the our database.',
-        HttpStatus.NOT_FOUND,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    const emailExists = await this.usersRepository.findOne({
-      where: { email },
-    });
-    if (emailExists) {
-      throw new HttpException(
-        'The email already is used by another user.',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    const passwordHash = await this.HashProvider.generateHash(password);
-
-    const updatedUser = this.usersRepository.merge(user, {
-      name,
-      lastname,
-      email,
-      password: passwordHash,
-      birthdate,
-    });
-
-    await this.usersRepository.save(updatedUser);
-
-    return updatedUser;
   }
 }
