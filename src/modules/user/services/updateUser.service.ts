@@ -31,12 +31,13 @@ export default class UpdateUserService {
         const emailExists = await this.usersRepository.findOne({
           where: { email },
         });
-        
-      if (emailExists) {
-        throw new HttpException(
-          'The email already is used by another user.',
-          HttpStatus.UNAUTHORIZED,
-        );
+
+        if (emailExists) {
+          throw new HttpException(
+            'The email already is used by another user.',
+            HttpStatus.UNAUTHORIZED,
+          );
+        }
       }
 
       if (user.username != username) {
