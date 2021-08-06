@@ -114,18 +114,16 @@ describe('Reset Password', () => {
     expect(usersRepository.findOne).toBeCalledTimes(0);
     expect(usersRepository.merge).toBeCalledTimes(0);
     expect(usersRepository.save).toBeCalledTimes(0);
-    // expect(hashProvider.generateHash).toBeCalledTimes(0);
   });
 
   it('Should not be able resert password of user, because the passwords no combine', async () => {
     expect(
-      resetPasswordService.execute(userTokenList[0].token, 'abcde', 'qwe1232'),
+      resetPasswordService.execute(userTokenList[0].token, 'abcde', 'abcdef'),
     ).rejects.toThrowError();
     expect(tokensRepository.findOne).toBeCalledTimes(1);
-    // expect(tokensRepository.find).toBeCalledTimes(1);
-    // expect(usersRepository.findOne).toBeCalledTimes(1);
-    // expect(usersRepository.merge).toBeCalledTimes(0);
-    // expect(usersRepository.save).toBeCalledTimes(0);
-    // expect(hashProvider.generateHash).toBeCalledTimes(0);
+    expect(tokensRepository.find).toBeCalledTimes(0);
+    expect(usersRepository.findOne).toBeCalledTimes(0);
+    expect(usersRepository.merge).toBeCalledTimes(0);
+    expect(usersRepository.save).toBeCalledTimes(0);
   });
 });

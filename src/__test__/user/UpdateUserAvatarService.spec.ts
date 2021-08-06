@@ -14,6 +14,7 @@ describe('Update Avatar', () => {
   const userUpdate: IUpdateUserDTO | User = {
     name: 'namefield',
     lastname: 'lastnamefield',
+    username: 'usernamefield',
     email: 'emailfield@gmail.com',
     password: 'passwordfield',
     birthdate: new Date(),
