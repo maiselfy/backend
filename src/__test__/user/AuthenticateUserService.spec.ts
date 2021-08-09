@@ -73,18 +73,16 @@ describe('Authenticate User', () => {
     expect(jwtService.sign).toHaveBeenCalledTimes(1);
   });
 
-  it('Should be not able create session, because user not exists', async () => {
+  it('Should not be able create session, because user not exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
     expect(
       authenticateUserService.execute(userCreatedSession),
     ).rejects.toThrowError();
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
-    // expect(hashProvider.compareHash).toHaveBeenCalledTimes(0);
-    // expect(jwtService.sign).toHaveBeenCalledTimes(0);
   });
 
-  it('Should be not able create session, because password no combine whit the of data base', async () => {
+  it('Should not be able create session, because password no combine whit the of data base', async () => {
     hashProvider.compareHash.mockReturnValueOnce(false);
 
     expect(
@@ -92,6 +90,5 @@ describe('Authenticate User', () => {
     ).rejects.toThrowError();
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
     expect(hashProvider.compareHash).toHaveBeenCalledTimes(1);
-    // expect(jwtService.sign).toHaveBeenCalledTimes(0);
   });
 });

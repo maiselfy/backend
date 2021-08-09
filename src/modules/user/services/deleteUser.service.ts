@@ -32,7 +32,7 @@ export default class DeleteUserService {
       return false;
     } catch {
       throw new HttpException(
-        'Sorry, we were unable to remove the user.',
+        'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
       );
     }

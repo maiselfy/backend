@@ -17,56 +17,63 @@ export class ResetPasswordService {
     @Inject(BCryptHashProvider) private readonly HashProvider: IHashProvider,
   ) {}
   async execute(token: string, password: string, passwordConfirm: string) {
-    const userToken = await this.userTokensRepository.findOne({
-      where: { token },
-    });
+    try {
+      const userToken = await this.userTokensRepository.findOne({
+        where: { token },
+      });
 
-    if (!userToken) {
-      throw new HttpException(
-        'This token does not exist in the our database.',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    const user = await this.userRepository.findOne({
-      where: { id: userToken.user_id },
-    });
-
-    const user_tokens = await this.userTokensRepository.find({
-      where: { user_id: user.id },
-    });
-
-    user_tokens.map(e => {
-      if (!isAfter(userToken.created_at, e.created_at) && e.token != token) {
+      if (!userToken) {
         throw new HttpException(
-          'This token does not active.',
+          'This token does not exist in the our database.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const user = await this.userRepository.findOne({
+        where: { id: userToken.user_id },
+      });
+
+      const user_tokens = await this.userTokensRepository.find({
+        where: { user_id: user.id },
+      });
+
+      user_tokens.map(e => {
+        if (!isAfter(userToken.created_at, e.created_at) && e.token != token) {
+          throw new HttpException(
+            'This token does not active.',
+            HttpStatus.UNAUTHORIZED,
+          );
+        }
+      });
+
+      if (!isAfter(new Date(userToken.expires_in), new Date())) {
+        throw new HttpException(
+          'This token has expired.',
           HttpStatus.UNAUTHORIZED,
         );
       }
-    });
 
-    if (!isAfter(new Date(userToken.expires_in), new Date())) {
+      if (password != passwordConfirm) {
+        throw new HttpException(
+          'This password does not match.',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      const passwordHash = await this.HashProvider.generateHash(password);
+
+      const updatedUser = this.userRepository.merge(user, {
+        password: passwordHash,
+      });
+
+      await this.userRepository.save(updatedUser);
+
+      return updatedUser;
+    } catch {
       throw new HttpException(
-        'This token has expired.',
-        HttpStatus.UNAUTHORIZED,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    if (password != passwordConfirm) {
-      throw new HttpException(
-        'This password does not match.',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    const passwordHash = await this.HashProvider.generateHash(password);
-
-    const updatedUser = this.userRepository.merge(user, {
-      password: passwordHash,
-    });
-
-    await this.userRepository.save(updatedUser);
-
-    return updatedUser;
   }
 }

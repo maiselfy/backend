@@ -102,10 +102,10 @@ describe('Create User', () => {
     expect(result).toEqual(userCreatedEntityList[0]);
     expect(usersRepository.create).toHaveBeenCalledTimes(1);
     expect(usersRepository.save).toHaveBeenCalledTimes(1);
-    expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+    expect(usersRepository.findOne).toHaveBeenCalledTimes(2);
   });
 
-  it('Should be not able create user what exists', async () => {
+  it('Should not be able create user what exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
     const data: ICreateUserDTO = {
@@ -146,10 +146,10 @@ describe('Create User', () => {
     expect(result).toEqual(userCreatedEntityList[1]);
     expect(usersRepository.create).toHaveBeenCalledTimes(1);
     expect(usersRepository.save).toHaveBeenCalledTimes(1);
-    expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
+    expect(usersRepository.findOne).toHaveBeenCalledTimes(2);
   });
 
-  it('Should be not able create other user what exists', async () => {
+  it('Should not be able create other user what exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
     const data: ICreateUserDTO = {

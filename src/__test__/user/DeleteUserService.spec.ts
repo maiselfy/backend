@@ -54,7 +54,7 @@ describe('Delete User', () => {
     expect(usersRepository.delete).toHaveBeenCalledTimes(1);
   });
 
-  it('Should be not able delete user', async () => {
+  it('Should not be able delete user', async () => {
     successfulDelete.raw = 1;
     successfulDelete.affected = 0;
 
@@ -71,7 +71,7 @@ describe('Delete User', () => {
     successfulDelete.affected = 1;
   });
 
-  it('Should be not able delete user, because user not exists, action throws exception', async () => {
+  it('Should not be able delete user, because user not exists, action throws exception', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
     expect(deleteUserService.execute('123')).rejects.toThrowError();

@@ -9,6 +9,7 @@ describe('Update User', () => {
   const userUpdate: IUpdateUserDTO | User = {
     name: 'namefield',
     lastname: 'lastnamefield',
+    username: 'usernamefield',
     email: 'emailfield@gmail.com',
     password: 'passwordfield',
     birthdate: new Date(),
@@ -17,6 +18,7 @@ describe('Update User', () => {
   const userUpdated: IUpdateUserDTO | User = {
     name: 'namefield2',
     lastname: 'lastnamefield2',
+    username: 'usernamefield2',
     email: 'emailfield2@gmail.com',
     password: 'passwordfield',
     birthdate: new Date(),
@@ -63,7 +65,8 @@ describe('Update User', () => {
     const data: IUpdateUserDTO | User = {
       name: 'namefield2',
       lastname: 'lastnamefield2',
-      email: 'emailfield2@gmail.com',
+      username: 'usernamefield',
+      email: 'emailfield@gmail.com',
       password: 'passwordfield',
       birthdate: new Date(),
     };
@@ -71,7 +74,7 @@ describe('Update User', () => {
     const result = await updateUserService.execute('1', data);
 
     expect(result).toEqual(userUpdated);
-    expect(usersRepository.findOne).toBeCalledTimes(2);
+    expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(usersRepository.merge).toBeCalledTimes(1);
     expect(usersRepository.save).toBeCalledTimes(1);
   });
@@ -82,6 +85,7 @@ describe('Update User', () => {
     const data: IUpdateUserDTO | User = {
       name: 'namefield2',
       lastname: 'lastnamefield2',
+      username: 'usernamefield',
       email: 'emailfield2@gmail.com',
       password: 'passwordfield',
       birthdate: new Date(),

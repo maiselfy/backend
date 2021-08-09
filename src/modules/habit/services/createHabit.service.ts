@@ -3,7 +3,7 @@ import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
 import ICreateHabitDTO from '../dtos/ICreateHabitDTO';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../user/infra/typeorm/entities/User';
 
 @Injectable()
 export default class CreateHabitService {
@@ -25,7 +25,11 @@ export default class CreateHabitService {
         where: { id: user_id },
       });
 
+<<<<<<< HEAD
       if (!user)
+=======
+      if (!buddy) {
+>>>>>>> 60e40fda9a8ed7b4a7069a540564303d6c4cb856
         throw new HttpException(
           'It is not possible to perform the operation, as there is no corresponding registered user',
           HttpStatus.NOT_FOUND,
