@@ -10,28 +10,35 @@ export default class ViewHabitService {
   ) {}
 
   async execute(id: string, user_id: string): Promise<Habit> {
-    const habit = await this.habitsRepository.findOne({
-      where: { id: id },
-    });
+    try {
+      const habit = await this.habitsRepository.findOne({
+        where: { id: id },
+      });
 
-    if (!habit) {
+      if (!habit) {
+        throw new HttpException(
+          'This habit does not exist in the our database.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const isTheUserHabit = await this.habitsRepository.findOne({
+        where: { user_id },
+      });
+
+      if (!isTheUserHabit) {
+        throw new HttpException(
+          'There is no corresponding habit for this user',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      return habit;
+    } catch {
       throw new HttpException(
-        'This habit does not exist in the our database.',
-        HttpStatus.NOT_FOUND,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    const isTheUserHabit = await this.habitsRepository.findOne({
-      where: { user_id },
-    });
-
-    if (!isTheUserHabit) {
-      throw new HttpException(
-        'There is no corresponding habit for this user',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    return habit;
   }
 }
