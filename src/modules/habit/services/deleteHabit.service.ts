@@ -1,38 +1,44 @@
 import { DeleteResult, Repository } from 'typeorm';
-import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import Habit from '../infra/typeorm/entities/Habit';
+import User from 'src/modules/user/infra/typeorm/entities/User';
 
 @Injectable()
 export default class DeleteHabitService {
   constructor(
     @InjectRepository(Habit) private habitsRepository: Repository<Habit>,
+    @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async execute(id: string, user_id: string): Promise<boolean> {
+  async execute(id: string, user_id: string): Promise<DeleteResult> {
     try {
       const habit = await this.habitsRepository.findOne({
-        where: { id: id, user_id: user_id },
+        where: { id },
       });
 
       if (!habit) {
         throw new HttpException(
-          'There is no habit for this user registered in our database',
+          'This habit does not exist in the our database.',
           HttpStatus.NOT_FOUND,
         );
       }
-      const successfulDelete = await this.habitsRepository.delete(id);
 
-      if (
-        (successfulDelete.raw == 0 || successfulDelete.raw == null) &&
-        successfulDelete.affected == 1
-      ) {
-        return true;
+      const isTheUserHabit = await this.habitsRepository.findOne({
+        where: { user_id },
+      });
+
+      if (!isTheUserHabit) {
+        throw new HttpException(
+          'There is no corresponding habit for this user',
+          HttpStatus.UNAUTHORIZED,
+        );
       }
-      return false;
+
+      return await this.habitsRepository.delete(id);
     } catch {
       throw new HttpException(
-        'Sorry, we were unable to remove the habit.',
+        'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
       );
     }
