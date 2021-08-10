@@ -23,7 +23,7 @@ export class createTableFriendship1628531640697 implements MigrationInterface {
           {
             name: 'status',
             type: 'varchar',
-            default: 'pending',
+            default: "'PENDING'",
           },
           {
             name: 'created_at',
