@@ -19,6 +19,7 @@ import DeleteHabitService from '../../services/deleteHabit.service';
 import ListHabitsService from '../../services/listHabits.service';
 import ViewHabitService from '../../services/viewHabit.service';
 import IUpdateHabitDTO from '../../dtos/IUpdateHabitDTO';
+import GetHabitDayCheckOfSevenDaysService from '../../services/getHabitDayCheckOfSevenDays.service';
 
 @Controller('habit')
 export default class HabitController {
@@ -82,7 +83,7 @@ export default class HabitController {
     return this.listHabitsService.execute(id);
   }
 
-  @Get('retrieve/id')
+  @Get('retrieve/:id')
   viewHabitOfUser(
     @Param('id') id: string,
     @Param('user_id') user_id: string,

@@ -10,9 +10,11 @@ import DeleteHabitService from './services/deleteHabit.service';
 import UpdateHabitService from './services/updateHabit.service';
 import User from '../user/infra/typeorm/entities/User';
 import RegisterCheckInHabitService from './services/registerCheckInHabit.service';
+import GetHabitDayCheckOfSevenDaysService from './services/getHabitDayCheckOfSevenDays.service';
+import HabitDayCheckController from './infra/http/habitDayCheck.controller';
 @Module({
   imports: [TypeOrmModule.forFeature([Habit, HabitDayCheck, User])],
-  controllers: [HabitController],
+  controllers: [HabitController, HabitDayCheckController],
   providers: [
     CreateHabitService,
     DeleteHabitService,
@@ -20,6 +22,7 @@ import RegisterCheckInHabitService from './services/registerCheckInHabit.service
     UpdateHabitService,
     ViewHabitService,
     RegisterCheckInHabitService,
+    GetHabitDayCheckOfSevenDaysService,
   ],
 })
 export class HabitModule implements NestModule {
