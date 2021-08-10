@@ -49,6 +49,7 @@ class Habit {
   @CreateDateColumn({ type: 'timestamp' })
   updated_at: Date;
 
+  /*
   constructor(habit?: Partial<Habit>) {
     this.id = habit?.id;
     this.user_id = habit?.user_id;
@@ -59,6 +60,7 @@ class Habit {
     this.created_at = habit?.created_at;
     this.updated_at = habit.updated_at;
   }
+  */
 }
 
 export default Habit;

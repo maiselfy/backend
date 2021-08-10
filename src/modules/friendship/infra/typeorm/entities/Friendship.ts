@@ -25,7 +25,7 @@ class Friendship {
   @CreateDateColumn({ type: 'timestamp' })
   updated_at: Date;
 
-  constructor(friendship?: Partial<Friendship>) {
+  /*constructor(friendship?: Partial<Friendship>) {
     this.id = friendship?.id;
     this.from_user_id = friendship?.from_user_id;
     this.to_user_id = friendship?.to_user_id;
@@ -33,6 +33,7 @@ class Friendship {
     this.created_at = friendship?.created_at;
     this.updated_at = friendship.updated_at;
   }
+  */
 }
 
 export default Friendship;

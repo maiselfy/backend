@@ -12,48 +12,63 @@ export default class SearchFriendOfUserService {
     private friendshipRepository: Repository<Friendship>,
   ) {}
 
-  async execute({ user_id, name }): Promise<User[]> {
-    let friends: User[];
+  async execute(user_id: string, name: string): Promise<User[]> {
+    try {
+      let friends: User[];
 
-    const user = await this.usersRepository.findOne({
-      where: { id: user_id },
-    });
+      const user = await this.usersRepository.findOne({
+        where: { id: user_id },
+      });
 
-    if (!user)
-      throw new HttpException(
-        'It is not possible to perform the operation, the user does not exist',
-        HttpStatus.NOT_FOUND,
-      );
+      if (!user)
+        throw new HttpException(
+          'It is not possible to perform the operation, the user does not exist',
+          HttpStatus.NOT_FOUND,
+        );
 
-    const all_friends = await this.friendshipRepository.find({
-      where: [
-        { from_user_id: user_id, status: 'Accepted' },
-        { to_user_id: user_id, status: 'Accepted' },
-      ],
-    });
-
-    for (const friend of all_friends) {
-      friends = await this.usersRepository.find({
+      const all_friends = await this.friendshipRepository.find({
         where: [
-          { id: friend.from_user_id, name: Like(`%${name}%`) },
-          { id: friend.from_user_id, lastname: Like(`%${name}%`) },
-          { id: friend.from_user_id, username: Like(`%${name}%`) },
-          { id: friend.to_user_id, name: Like(`%${name}%`) },
-          { id: friend.to_user_id, lastname: Like(`%${name}%`) },
-          { id: friend.to_user_id, username: Like(`%${name}%`) },
+          { from_user_id: user_id, status: 'ACCEPTED' },
+          { to_user_id: user_id, status: 'ACCEPTED' },
         ],
       });
-    }
 
-    const haveFriends = friends.length;
+      if (!(all_friends.length > 0)) {
+        throw new HttpException(
+          'Sorry, this user has no registered friendships',
+          HttpStatus.NOT_FOUND,
+        );
+      }
 
-    if (haveFriends === 0 || null) {
+      for (const friend of all_friends) {
+        friends = await this.usersRepository.find({
+          where: [
+            { id: friend.from_user_id, name: Like(`%${name}%`) },
+            { id: friend.from_user_id, lastname: Like(`%${name}%`) },
+            { id: friend.from_user_id, username: Like(`%${name}%`) },
+            { id: friend.to_user_id, name: Like(`%${name}%`) },
+            { id: friend.to_user_id, lastname: Like(`%${name}%`) },
+            { id: friend.to_user_id, username: Like(`%${name}%`) },
+          ],
+        });
+      }
+
+      friends.forEach(friend => {
+        if (friend.id === user_id) {
+          friends.splice(friends.indexOf(friend), 1);
+        }
+      });
+
+      if (!(friends.length > 0)) {
+        throw new HttpException('Sorry, User not found.', HttpStatus.NOT_FOUND);
+      }
+
+      return friends;
+    } catch {
       throw new HttpException(
-        'Sorry you do not have friends assigned to your habits',
-        HttpStatus.NOT_FOUND,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    return friends;
   }
 }
