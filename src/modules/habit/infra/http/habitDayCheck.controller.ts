@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Res,
-} from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 
 import Habit from '../typeorm/entities/Habit';
 import RegisterCheckInHabitService from '../../services/registerCheckInHabit.service';
@@ -26,12 +16,12 @@ export default class HabitDayCheckController {
   @Post()
   registerHabitDayCheck(
     @Body()
-    { user_id, habit_id }: IRegisterCheckInHabitDTO,
+    { user_id, habit_id, date }: IRegisterCheckInHabitDTO,
   ): Promise<HabitDayCheck> {
     return this.registerCheckInHabitService.execute({
       user_id,
       habit_id,
-      date: new Date().getDate(),
+      date,
     });
   }
 

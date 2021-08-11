@@ -19,7 +19,6 @@ import DeleteHabitService from '../../services/deleteHabit.service';
 import ListHabitsService from '../../services/listHabits.service';
 import ViewHabitService from '../../services/viewHabit.service';
 import IUpdateHabitDTO from '../../dtos/IUpdateHabitDTO';
-import GetHabitDayCheckOfSevenDaysService from '../../services/getHabitDayCheckOfSevenDays.service';
 
 @Controller('habit')
 export default class HabitController {
