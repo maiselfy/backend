@@ -1,7 +1,11 @@
+import { Exclude, Transform } from 'class-transformer';
+import User from 'src/modules/user/infra/typeorm/entities/User';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -10,9 +14,11 @@ class Friendship {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Exclude()
   @Column('uuid')
   from_user_id: string;
 
+  @Exclude()
   @Column('uuid')
   to_user_id: string;
 
@@ -22,8 +28,27 @@ class Friendship {
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
+  @Exclude()
   @CreateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+
+  @Transform(({ value }) => ({
+    id: value.id,
+    fullname: value.fullName,
+    email: value.email,
+  }))
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'from_user_id' })
+  fromUser: User;
+
+  @Transform(({ value }) => ({
+    id: value.id,
+    fullname: value.fullName,
+    email: value.email,
+  }))
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'to_user_id' })
+  toUser: User;
 
   /*constructor(friendship?: Partial<Friendship>) {
     this.id = friendship?.id;

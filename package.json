@@ -33,6 +33,7 @@
     "@sendgrid/mail": "^7.4.4",
     "@types/bcryptjs": "^2.4.2",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.4.0",
     "date-fns": "^2.21.1",
     "multer": "^1.4.2",
     "pg": "^8.7.1",

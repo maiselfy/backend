@@ -12,7 +12,7 @@ export default class ListFriendsOfUserService {
     private friendshipRepository: Repository<Friendship>,
   ) {}
 
-  async execute(user_id: string): Promise<User[]> {
+  async execute(user_id: string): Promise<any[]> {
     try {
       let friends: User[];
       const from_user = await this.usersRepository.findOne({
@@ -30,28 +30,10 @@ export default class ListFriendsOfUserService {
           { from_user_id: user_id, status: 'ACCEPTED' },
           { to_user_id: user_id, status: 'ACCEPTED' },
         ],
+        relations: ['fromUser', 'toUser'],
       });
 
-      for (const friend of all_friends) {
-        friends = await this.usersRepository.find({
-          where: [{ id: friend.from_user_id }, { id: friend.to_user_id }],
-        });
-      }
-
-      friends.forEach(friend => {
-        if (friend.id === user_id) {
-          friends.splice(friends.indexOf(friend), 1);
-        }
-      });
-
-      if (!(friends.length > 0)) {
-        throw new HttpException(
-          'Sorry, this user has no registered friendships',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      return friends;
+      return all_friends;
     } catch {
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',

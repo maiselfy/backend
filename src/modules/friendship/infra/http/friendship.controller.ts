@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import User from 'src/modules/user/infra/typeorm/entities/User';
 
 import ICreateFriendshipBetweenUsersDTO from '../../dtos/ICreateFriendshipBetweenUsersDTO';
@@ -9,6 +17,7 @@ import SearchFriendOfUserService from '../../services/searchFriendOfUser.service
 import Friendship from '../typeorm/entities/Friendship';
 
 @Controller('friendship')
+@UseInterceptors(ClassSerializerInterceptor)
 export default class HabitController {
   constructor(
     private createFriendshipBetweenUsersService: CreateFriendshipBetweenUsersService,
