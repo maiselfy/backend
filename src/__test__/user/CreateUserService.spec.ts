@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import CreateUserService from '../../modules/user/services/createUser.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import ICreateUserDTO from '../../modules/user/dtos/ICreateUserDTO';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Create User', () => {
   const userCreatedEntityList: Array<User> = [
@@ -117,7 +118,12 @@ describe('Create User', () => {
       birthdate: new Date(),
     };
 
-    expect(createUserService.execute(data)).rejects.toThrowError();
+    expect(createUserService.execute(data)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
     expect(usersRepository.create).toHaveBeenCalledTimes(0);
     expect(usersRepository.save).toHaveBeenCalledTimes(0);
@@ -161,7 +167,12 @@ describe('Create User', () => {
       birthdate: new Date(),
     };
 
-    expect(createUserService.execute(data)).rejects.toThrowError();
+    expect(createUserService.execute(data)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
     expect(usersRepository.create).toHaveBeenCalledTimes(0);
     expect(usersRepository.save).toHaveBeenCalledTimes(0);

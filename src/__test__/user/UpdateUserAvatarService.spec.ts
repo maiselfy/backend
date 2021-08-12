@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import IUpdateUserDTO from '../../modules/user/dtos/IUpdateUserDTO.interface';
 import UpdateUserAvatarService from '../../modules/user/services/updateUserAvatar.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Update Avatar', () => {
   interface Request {
@@ -69,7 +70,12 @@ describe('Update Avatar', () => {
       avatarFilename: 'src/__test__/user/UpdateUserAvatarService.spec.ts',
     };
 
-    expect(updateUserAvatarService.execute(data)).rejects.toThrowError();
+    expect(updateUserAvatarService.execute(data)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(usersRepository.save).toBeCalledTimes(0);
   });

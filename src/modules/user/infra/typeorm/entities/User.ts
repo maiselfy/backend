@@ -48,13 +48,13 @@ class User {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
 
-  constructor(user?: Partial<User>) {
-    this.name = user.name;
-    this.username = user.username;
-    this.lastname = user.lastname;
-    this.email = user.email;
-    this.password = user.password;
-    this.birthdate = user.birthdate;
-  }
+  // constructor(user?: Partial<User>) {
+  //   this.name = user.name;
+  //   this.username = user.username;
+  //   this.lastname = user.lastname;
+  //   this.email = user.email;
+  //   this.password = user.password;
+  //   this.birthdate = user.birthdate;
+  // }
 }
 export default User;

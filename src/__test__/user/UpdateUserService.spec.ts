@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import UpdateUserService from '../../modules/user/services/updateUser.service';
 import IUpdateUserDTO from '../../modules/user/dtos/IUpdateUserDTO.interface';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Update User', () => {
   const userUpdate: IUpdateUserDTO | User = {
@@ -91,7 +92,12 @@ describe('Update User', () => {
       birthdate: new Date(),
     };
 
-    expect(updateUserService.execute('1', data)).rejects.toThrowError();
+    expect(updateUserService.execute('1', data)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(usersRepository.merge).toBeCalledTimes(0);
     expect(usersRepository.save).toBeCalledTimes(0);
