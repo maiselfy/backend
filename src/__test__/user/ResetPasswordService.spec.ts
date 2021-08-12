@@ -8,9 +8,14 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Reset Password', () => {
   const userTokenList: Array<UserToken> = [
-    new UserToken({
+    {
+      id: '',
+      user_id: '',
       token: '96070bed-c317-4132-ab3c-2ed4bacc9124',
-    }),
+      expires_in: new Date(2030, 10, 10),
+      created_at: undefined,
+      updated_at: undefined,
+    },
   ];
 
   const userCreatedEntityList: Array<User> = [
@@ -94,7 +99,7 @@ describe('Reset Password', () => {
     expect(resetPasswordService).toBeDefined();
   });
 
-  it('Should be able resert password of user', async () => {
+  it('Should be able reset password of user', async () => {
     const result = await resetPasswordService.execute(
       userTokenList[0].token,
       'qwe1232',
@@ -110,7 +115,7 @@ describe('Reset Password', () => {
     expect(hashProvider.generateHash).toBeCalledTimes(1);
   });
 
-  it('Should not be able resert password of user, because not exists valid token', async () => {
+  it('Should not be able reset password of user, because not exists valid token', async () => {
     jest.spyOn(tokensRepository, 'findOne').mockRejectedValueOnce(new Error());
 
     expect(
@@ -119,12 +124,7 @@ describe('Reset Password', () => {
         'qwe1232',
         'qwe1232',
       ),
-    ).rejects.toEqual(
-      new HttpException(
-        'Sorry, this operation could not be performed, please try again.',
-        HttpStatus.BAD_REQUEST,
-      ),
-    );
+    ).rejects.toThrowError();
     expect(tokensRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.find).toBeCalledTimes(0);
     expect(usersRepository.findOne).toBeCalledTimes(0);
@@ -132,7 +132,7 @@ describe('Reset Password', () => {
     expect(usersRepository.save).toBeCalledTimes(0);
   });
 
-  it('Should not be able resert password of user, because the passwords no combine', async () => {
+  it('Should not be able reset password of user, because the passwords no combine', async () => {
     expect(
       resetPasswordService.execute(userTokenList[0].token, 'abcde', 'abcdef'),
     ).rejects.toEqual(

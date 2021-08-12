@@ -22,9 +22,14 @@ describe('Send Email', () => {
     updated_at: new Date(),
   };
 
-  const userTokenList: UserToken = new UserToken({
-    token: '96070bed-c317-4132-ab3c-2ed4bacc9124',
-  });
+  const userTokenList: UserToken = {
+    id: '',
+    user_id: '',
+    token: '',
+    expires_in: undefined,
+    created_at: undefined,
+    updated_at: undefined,
+  };
 
   const emailCreateUserSend = {
     to: userCreatedEntity.email,
