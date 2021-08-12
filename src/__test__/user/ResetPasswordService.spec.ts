@@ -14,22 +14,32 @@ describe('Reset Password', () => {
   ];
 
   const userCreatedEntityList: Array<User> = [
-    new User({
+    {
       name: 'namefield',
       username: 'usernamefield',
       lastname: 'lastnamefield',
       email: 'emailfield@gmail.com',
       password: 'qwe123',
       birthdate: new Date(),
-    }),
-    new User({
-      name: 'namefield',
-      username: 'usernamefield',
-      lastname: 'lastnamefield',
-      email: 'emailfield@gmail.com',
+      id: 'idfield',
+      bodies: [],
+      avatar: 'avatarfield',
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
+    {
+      name: 'namefield2',
+      username: 'usernamefield2',
+      lastname: 'lastnamefield2',
+      email: 'emailfield2@gmail.com',
       password: 'qwe1232',
       birthdate: new Date(),
-    }),
+      id: 'idfield2',
+      bodies: [],
+      avatar: 'avatarfield2',
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
   ];
 
   const hashProvider = {
