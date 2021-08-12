@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
 import { SendEmailWithTokenService } from '../../modules/user/services/sendEmailWithToken.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Send Email', () => {
   const userCreatedEntity: User = new User({
@@ -98,7 +99,12 @@ describe('Send Email', () => {
 
     const email = userCreatedEntity.email;
 
-    expect(sendEmailService.execute(email)).rejects.toThrowError();
+    expect(sendEmailService.execute(email)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.findOne).toBeCalledTimes(0);
     expect(tokensRepository.create).toBeCalledTimes(0);

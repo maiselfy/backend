@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ResetPasswordService } from '../../modules/user/services/resetPassword.service';
 import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Reset Password', () => {
   const userTokenList: Array<UserToken> = [
@@ -108,7 +109,12 @@ describe('Reset Password', () => {
         'qwe1232',
         'qwe1232',
       ),
-    ).rejects.toThrowError();
+    ).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(tokensRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.find).toBeCalledTimes(0);
     expect(usersRepository.findOne).toBeCalledTimes(0);
@@ -119,7 +125,12 @@ describe('Reset Password', () => {
   it('Should not be able resert password of user, because the passwords no combine', async () => {
     expect(
       resetPasswordService.execute(userTokenList[0].token, 'abcde', 'abcdef'),
-    ).rejects.toThrowError();
+    ).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(tokensRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.find).toBeCalledTimes(0);
     expect(usersRepository.findOne).toBeCalledTimes(0);
