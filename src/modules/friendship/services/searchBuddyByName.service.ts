@@ -6,14 +6,13 @@ import Friendship from '../infra/typeorm/entities/Friendship';
 
 @Injectable()
 export default class SearchBuddyByNameService {
-  searchedUsers: any[];
-
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(Friendship)
+    private friendshipRepository: Repository<Friendship>,
   ) {}
 
   async execute(user_id: string, name: string): Promise<any[]> {
-    this.searchedUsers = [];
     try {
       const user = await this.usersRepository.findOne({
         where: { id: user_id },
@@ -25,18 +24,24 @@ export default class SearchBuddyByNameService {
           HttpStatus.NOT_FOUND,
         );
 
-      const users = await this.usersRepository.find();
-
-      users.forEach(user => {
-        if (
-          user.fullName.toLowerCase().includes(name.toLowerCase()) ||
-          user.lastname.toLowerCase().includes(name.toLowerCase())
-        ) {
-          this.searchedUsers.push(user);
-        }
+      const searchedUsers = await this.usersRepository.find({
+        where: [
+          {
+            name: Like(`%${name}%`),
+          },
+          {
+            lastname: Like(`%${name}%`),
+          },
+        ],
       });
 
-      return this.searchedUsers;
+      if (!(searchedUsers.length > 0)) {
+        throw new HttpException(
+          'Sorry, no matching results were found, try checking spelling and accenting the name',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return searchedUsers;
     } catch (error) {
       console.log(error);
       throw new HttpException(
