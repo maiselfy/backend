@@ -1,4 +1,4 @@
-import { Like, Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import User from 'src/modules/user/infra/typeorm/entities/User';
@@ -24,24 +24,16 @@ export default class SearchBuddyByNameService {
           HttpStatus.NOT_FOUND,
         );
 
-      const searchedUsers = await this.usersRepository.find({
+      return await this.usersRepository.find({
         where: [
           {
-            name: Like(`%${name}%`),
+            name: ILike(`%${name}%`),
           },
           {
-            lastname: Like(`%${name}%`),
+            lastname: ILike(`%${name}%`),
           },
         ],
       });
-
-      if (!(searchedUsers.length > 0)) {
-        throw new HttpException(
-          'Sorry, no matching results were found, try checking spelling and accenting the name',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      return searchedUsers;
     } catch (error) {
       console.log(error);
       throw new HttpException(
