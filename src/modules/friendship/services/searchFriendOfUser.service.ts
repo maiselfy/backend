@@ -1,4 +1,4 @@
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import User from 'src/modules/user/infra/typeorm/entities/User';
@@ -6,16 +6,17 @@ import Friendship from '../infra/typeorm/entities/Friendship';
 
 @Injectable()
 export default class SearchFriendOfUserService {
+  friends: any[];
+
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
     @InjectRepository(Friendship)
     private friendshipRepository: Repository<Friendship>,
   ) {}
 
-  async execute(user_id: string, name: string): Promise<User[]> {
+  async execute(user_id: string, name: string): Promise<any[]> {
+    this.friends = [];
     try {
-      let friends: User[];
-
       const user = await this.usersRepository.findOne({
         where: { id: user_id },
       });
@@ -28,43 +29,38 @@ export default class SearchFriendOfUserService {
 
       const all_friends = await this.friendshipRepository.find({
         where: [
-          { from_user_id: user_id, status: 'ACCEPTED' },
-          { to_user_id: user_id, status: 'ACCEPTED' },
+          {
+            from_user_id: user_id,
+            status: 'ACCEPTED',
+          },
+          {
+            to_user_id: user_id,
+            status: 'ACCEPTED',
+          },
         ],
+        relations: ['fromUser', 'toUser'],
       });
 
-      if (!(all_friends.length > 0)) {
-        throw new HttpException(
-          'Sorry, this user has no registered friendships',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+      //Usar o includes.
 
-      for (const friend of all_friends) {
-        friends = await this.usersRepository.find({
-          where: [
-            { id: friend.from_user_id, name: Like(`%${name}%`) },
-            { id: friend.from_user_id, lastname: Like(`%${name}%`) },
-            { id: friend.from_user_id, username: Like(`%${name}%`) },
-            { id: friend.to_user_id, name: Like(`%${name}%`) },
-            { id: friend.to_user_id, lastname: Like(`%${name}%`) },
-            { id: friend.to_user_id, username: Like(`%${name}%`) },
-          ],
-        });
-      }
-
-      friends.forEach(friend => {
-        if (friend.id === user_id) {
-          friends.splice(friends.indexOf(friend), 1);
+      all_friends.forEach(friend => {
+        if (
+          friend.toUser.name.toLowerCase().includes(name.toLowerCase()) ===
+            true ||
+          friend.fromUser.name.toLowerCase().includes(name.toLowerCase()) ===
+            true ||
+          friend.toUser.lastname.toLowerCase().includes(name.toLowerCase()) ===
+            true ||
+          friend.fromUser.lastname
+            .toLowerCase()
+            .includes(name.toLowerCase()) === true
+        ) {
+          this.friends.push(friend);
         }
       });
-
-      if (!(friends.length > 0)) {
-        throw new HttpException('Sorry, User not found.', HttpStatus.NOT_FOUND);
-      }
-
-      return friends;
-    } catch {
+      return this.friends;
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

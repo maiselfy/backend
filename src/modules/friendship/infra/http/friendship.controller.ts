@@ -13,6 +13,7 @@ import ICreateFriendshipBetweenUsersDTO from '../../dtos/ICreateFriendshipBetwee
 
 import CreateFriendshipBetweenUsersService from '../../services/createFriendshipBetweenUsers.service';
 import ListFriendsOfUserService from '../../services/listFriendsOfUser.service';
+import SearchBuddyByNameService from '../../services/searchBuddyByName.service';
 import SearchFriendOfUserService from '../../services/searchFriendOfUser.service';
 import Friendship from '../typeorm/entities/Friendship';
 
@@ -23,6 +24,7 @@ export default class HabitController {
     private createFriendshipBetweenUsersService: CreateFriendshipBetweenUsersService,
     private listFriendsOfUserService: ListFriendsOfUserService,
     private searchFriendOfUserService: SearchFriendOfUserService,
+    private searchBuddyByNameService: SearchBuddyByNameService,
   ) {}
 
   @Post()
@@ -40,11 +42,20 @@ export default class HabitController {
   listFriendsOfUser(@Param('user_id') user_id: string): Promise<User[]> {
     return this.listFriendsOfUserService.execute(user_id);
   }
+
   @Get('search/:user_id/:name')
-  searchBuddy(
+  searchFriendOfUserByName(
     @Param('user_id') user_id: string,
     @Param('name') name: string,
-  ): Promise<User[]> {
+  ): Promise<any> {
     return this.searchFriendOfUserService.execute(user_id, name);
+  }
+
+  @Get('searchBuddy/:user_id/:name')
+  searchBuddyByName(
+    @Param('user_id') user_id: string,
+    @Param('name') name: string,
+  ): Promise<any> {
+    return this.searchBuddyByNameService.execute(user_id, name);
   }
 }

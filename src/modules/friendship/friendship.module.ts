@@ -7,6 +7,7 @@ import CreateFriendshipBetweenUsersService from './services/createFriendshipBetw
 import ListFriendsOfUserService from './services/listFriendsOfUser.service';
 
 import SearchFriendOfUserService from './services/searchFriendOfUser.service';
+import SearchBuddyByNameService from './services/searchBuddyByName.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Friendship, User])],
   controllers: [FriendshipController],
@@ -14,6 +15,7 @@ import SearchFriendOfUserService from './services/searchFriendOfUser.service';
     CreateFriendshipBetweenUsersService,
     ListFriendsOfUserService,
     SearchFriendOfUserService,
+    SearchBuddyByNameService,
   ],
 })
 export class FriendshipModule {}
