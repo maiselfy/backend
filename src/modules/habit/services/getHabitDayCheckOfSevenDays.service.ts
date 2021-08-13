@@ -1,9 +1,10 @@
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Habit from '../infra/typeorm/entities/Habit';
 import User from 'src/modules/user/infra/typeorm/entities/User';
 import HabitDayCheck from '../infra/typeorm/entities/HabitDayCheck';
+import * as datefns from 'date-fns';
 
 @Injectable()
 export default class GetHabitDayCheckOfSevenDaysService {
@@ -27,11 +28,15 @@ export default class GetHabitDayCheckOfSevenDaysService {
         );
       }
 
-      const allChecks = await this.daysCheckRepository.findAndCount({
-        where: { user_id },
+      const today = new Date();
+      const initOfWeek = datefns.startOfWeek(today);
+      const endOfWeek = datefns.endOfWeek(today);
+
+      const registerChecks = await this.daysCheckRepository.find({
+        where: { user_id, date: Between(initOfWeek, endOfWeek) },
       });
 
-      return allChecks;
+      return registerChecks;
     } catch {
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',

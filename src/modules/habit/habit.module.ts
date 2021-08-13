@@ -12,6 +12,7 @@ import User from '../user/infra/typeorm/entities/User';
 import RegisterCheckInHabitService from './services/registerCheckInHabit.service';
 import GetHabitDayCheckOfSevenDaysService from './services/getHabitDayCheckOfSevenDays.service';
 import HabitDayCheckController from './infra/http/habitDayCheck.controller';
+import RemoveCheckInHabitService from './services/removeCheckInHabit.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Habit, HabitDayCheck, User])],
   controllers: [HabitController, HabitDayCheckController],
@@ -23,6 +24,7 @@ import HabitDayCheckController from './infra/http/habitDayCheck.controller';
     ViewHabitService,
     RegisterCheckInHabitService,
     GetHabitDayCheckOfSevenDaysService,
+    RemoveCheckInHabitService,
   ],
 })
 export class HabitModule implements NestModule {
