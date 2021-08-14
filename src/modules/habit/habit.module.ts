@@ -10,7 +10,7 @@ import DeleteHabitService from './services/deleteHabit.service';
 import UpdateHabitService from './services/updateHabit.service';
 import User from '../user/infra/typeorm/entities/User';
 import RegisterCheckInHabitService from './services/registerCheckInHabit.service';
-import GetHabitDayCheckOfSevenDaysService from './services/getHabitDayCheckOfSevenDays.service';
+import GetCurrentWeekFrequency from './services/getCurrentWeekFrequency.service';
 import HabitDayCheckController from './infra/http/habitDayCheck.controller';
 import RemoveCheckInHabitService from './services/removeCheckInHabit.service';
 @Module({
@@ -23,7 +23,7 @@ import RemoveCheckInHabitService from './services/removeCheckInHabit.service';
     UpdateHabitService,
     ViewHabitService,
     RegisterCheckInHabitService,
-    GetHabitDayCheckOfSevenDaysService,
+    GetCurrentWeekFrequency,
     RemoveCheckInHabitService,
   ],
 })

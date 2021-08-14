@@ -12,14 +12,14 @@ import { Response } from 'express';
 import RegisterCheckInHabitService from '../../services/registerCheckInHabit.service';
 import IRegisterCheckInHabitDTO from '../../dtos/IRegisterCheckInHabitDTO';
 import HabitDayCheck from '../typeorm/entities/HabitDayCheck';
-import GetHabitDayCheckOfSevenDaysService from '../../services/getHabitDayCheckOfSevenDays.service';
+import GetCurrentWeekFrequency from '../../services/getCurrentWeekFrequency.service';
 import RemoveCheckInHabitService from '../../services/removeCheckInHabit.service';
 
 @Controller('habitCheck')
 export default class HabitDayCheckController {
   constructor(
     private registerCheckInHabitService: RegisterCheckInHabitService,
-    private getHabitDayCheckOfSevenDaysService: GetHabitDayCheckOfSevenDaysService,
+    private getCurrentWeekFrequency: GetCurrentWeekFrequency,
     private removeCheckInHabitService: RemoveCheckInHabitService,
   ) {}
 
@@ -35,11 +35,12 @@ export default class HabitDayCheckController {
     });
   }
 
-  @Get('listChecks/:user_id')
+  @Get('listChecks/:userId/:habitId')
   getHabitDayCheckOfSevenDays(
-    @Param('user_id') user_id: string,
+    @Param('userId') userId: string,
+    @Param('habitId') habitId: string,
   ): Promise<HabitDayCheck> {
-    return this.getHabitDayCheckOfSevenDaysService.execute(user_id);
+    return this.getCurrentWeekFrequency.execute({ habitId, userId });
   }
 
   @Delete('delete/:habit_id/:user_id/:date')
