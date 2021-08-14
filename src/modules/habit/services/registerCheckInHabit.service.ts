@@ -1,6 +1,11 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import Habit from '../infra/typeorm/entities/Habit';
 import User from 'src/modules/user/infra/typeorm/entities/User';
 import IRegisterCheckInHabitDTO from '../dtos/IRegisterCheckInHabitDTO';
@@ -20,6 +25,7 @@ export default class RegisterCheckInHabitService {
   async execute({
     user_id,
     habit_id,
+    date,
   }: IRegisterCheckInHabitDTO): Promise<HabitDayCheck> {
     try {
       const user = await this.usersRepository.findOne({
@@ -51,16 +57,24 @@ export default class RegisterCheckInHabitService {
         );
       }
 
-      const date = new Date().toISOString().split('T')[0];
+      const dateFormatted = new Date(date);
+      dateFormatted.setHours(0, 0, 0, 0);
 
-      const checksOfUser = await this.daysCheckRepository.find({
-        where: { user_id, habit_id },
+      const checkAlreadyExists = await this.daysCheckRepository.find({
+        where: {
+          user_id,
+          habit_id,
+          date: dateFormatted,
+        },
       });
+
+      if (checkAlreadyExists === [])
+        throw new UnauthorizedException('This date is already marked');
 
       const checkInHabit = this.daysCheckRepository.create({
         user_id,
         habit_id,
-        date: parse('2021-08-13', 'yyyy-MM-dd', new Date()),
+        date: dateFormatted,
       });
 
       await this.daysCheckRepository.save(checkInHabit);
@@ -68,6 +82,8 @@ export default class RegisterCheckInHabitService {
       return checkInHabit;
     } catch (error) {
       console.log(error);
+      if (error) throw error;
+
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
