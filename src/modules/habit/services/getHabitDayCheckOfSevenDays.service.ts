@@ -36,12 +36,44 @@ export default class GetHabitDayCheckOfSevenDaysService {
         where: { user_id, date: Between(initOfWeek, endOfWeek) },
       });
 
-      return registerChecks;
-    } catch {
+      const dates = this.getDates(initOfWeek, endOfWeek);
+
+      return dates.map(dateItem => {
+        const findCheck = registerChecks.find(check =>
+          datefns.isEqual(check.date, dateItem),
+        );
+        console.log(findCheck, dateItem);
+        if (findCheck) {
+          return {
+            date: dateItem,
+            checked: true,
+          };
+        }
+        return {
+          date: dateItem,
+          checked: false,
+        };
+      });
+    } catch (error) {
+      if (error) throw error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+  private getDates(startDate, endDate) {
+    const dates = [];
+    let currentDate = startDate;
+    const addDays = function(days) {
+      const date = new Date(this.valueOf());
+      date.setDate(date.getDate() + days);
+      return date;
+    };
+    while (currentDate <= endDate) {
+      dates.push(currentDate);
+      currentDate = addDays.call(currentDate, 1);
+    }
+    return dates;
   }
 }
