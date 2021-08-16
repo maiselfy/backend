@@ -98,19 +98,18 @@ export default class HabitController {
           if (currentWeekFrequency[frequency].checked === true) {
             numDaysChecked += 1;
             stabilityChartData.push(1);
-            break;
+          } else {
+            stabilityChartData.push(0);
           }
-
-          stabilityChartData.push(0);
         }
 
-        const stabilityAverage = numDaysChecked / 7;
+        const stabilityAverage = (numDaysChecked / 7) * 100;
 
         return {
           ...habit,
           currentWeekFrequency,
           stability: {
-            avg: stabilityAverage,
+            avg: stabilityAverage.toFixed(2),
             stabilityChartData,
           },
         };

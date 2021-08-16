@@ -41,7 +41,7 @@ export default class RemoveCheckInHabitService {
         where: {
           habit_id,
           user_id,
-          date,
+          date: new Date(date),
         },
       });
 
@@ -52,7 +52,7 @@ export default class RemoveCheckInHabitService {
         );
       }
 
-      return await this.habitsRepository.delete(canBeRemoved.id);
+      return this.daysCheckRepository.remove(canBeRemoved);
     } catch (error) {
       console.log(error);
       throw new HttpException(

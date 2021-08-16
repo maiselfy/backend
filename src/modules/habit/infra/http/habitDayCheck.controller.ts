@@ -14,6 +14,8 @@ import IRegisterCheckInHabitDTO from '../../dtos/IRegisterCheckInHabitDTO';
 import HabitDayCheck from '../typeorm/entities/HabitDayCheck';
 import GetCurrentWeekFrequency from '../../services/getCurrentWeekFrequency.service';
 import RemoveCheckInHabitService from '../../services/removeCheckInHabit.service';
+import { User as UserDecorator } from 'src/modules/user/infra/http/decorators/user.decorator';
+import User from 'src/modules/user/infra/typeorm/entities/User';
 
 @Controller('habitCheck')
 export default class HabitDayCheckController {
@@ -43,16 +45,16 @@ export default class HabitDayCheckController {
     return this.getCurrentWeekFrequency.execute({ habitId, userId });
   }
 
-  @Delete('delete/:habit_id/:user_id/:date')
+  @Delete('delete/:habit_id/:date')
   removerHabitDayCheck(
     @Param('habit_id') habit_id: string,
-    @Param('user_id') user_id: string,
     @Param('date') date: string,
+    @UserDecorator() user: User,
   ) {
-    this.removeCheckInHabitService
-      .execute(habit_id, user_id, date)
-      .then(res => {
-        console.log(res);
-      });
+    this.removeCheckInHabitService.execute(
+      habit_id,
+      user.id,
+      new Date(date).toUTCString(),
+    );
   }
 }
