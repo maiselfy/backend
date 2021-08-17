@@ -58,4 +58,5 @@ class User {
     return `${this.name} ${this.lastname}`;
   }
 }
+
 export default User;

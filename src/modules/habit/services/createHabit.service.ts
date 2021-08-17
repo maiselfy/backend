@@ -20,40 +20,46 @@ export default class CreateHabitService {
     color,
     buddy_id,
   }: ICreateHabitDTO): Promise<Habit> {
-    const user = await this.usersRepository.findOne({
-      where: { id: user_id },
-    });
-
-    if (!user)
-      throw new HttpException(
-        'It is not possible to perform the operation, as there is no corresponding registered user',
-        HttpStatus.NOT_FOUND,
-      );
-
-    if (buddy_id != null) {
-      const buddy = await this.usersRepository.findOne({
-        where: { id: buddy_id },
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { id: user_id },
       });
 
-      if (!buddy) {
+      if (!user)
         throw new HttpException(
-          'It is not possible to perform an operation, as there is no corresponding registered user to be used as a buddy',
+          'It is not possible to perform the operation, as there is no corresponding registered user',
           HttpStatus.NOT_FOUND,
         );
+
+      if (buddy_id !== null) {
+        const buddy = await this.usersRepository.findOne({
+          where: { id: buddy_id },
+        });
+
+        if (!buddy) {
+          throw new HttpException(
+            'It is not possible to perform an operation, as there is no corresponding registered user to be used as a buddy',
+            HttpStatus.NOT_FOUND,
+          );
+        }
       }
+
+      const habit = this.habitsRepository.create({
+        name,
+        description,
+        objective,
+        color,
+        buddy_id,
+      });
+
+      await this.habitsRepository.save(habit);
+
+      return habit;
+    } catch {
+      throw new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-
-    const habit = this.habitsRepository.create({
-      user_id,
-      name,
-      description,
-      objective,
-      color,
-      buddy_id,
-    });
-
-    await this.habitsRepository.save(habit);
-
-    return habit;
   }
 }

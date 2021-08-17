@@ -4,31 +4,47 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ResetPasswordService } from '../../modules/user/services/resetPassword.service';
 import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Reset Password', () => {
   const userTokenList: Array<UserToken> = [
-    new UserToken({
+    {
+      id: '',
+      user_id: '',
       token: '96070bed-c317-4132-ab3c-2ed4bacc9124',
-    }),
+      expires_in: new Date(2030, 10, 10),
+      created_at: undefined,
+      updated_at: undefined,
+    },
   ];
 
   const userCreatedEntityList: Array<User> = [
-    new User({
+    {
       name: 'namefield',
       username: 'usernamefield',
       lastname: 'lastnamefield',
       email: 'emailfield@gmail.com',
       password: 'qwe123',
       birthdate: new Date(),
-    }),
-    new User({
-      name: 'namefield',
-      username: 'usernamefield',
-      lastname: 'lastnamefield',
-      email: 'emailfield@gmail.com',
+      id: 'idfield',
+      bodies: [],
+      avatar: 'avatarfield',
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
+    {
+      name: 'namefield2',
+      username: 'usernamefield2',
+      lastname: 'lastnamefield2',
+      email: 'emailfield2@gmail.com',
       password: 'qwe1232',
       birthdate: new Date(),
-    }),
+      id: 'idfield2',
+      bodies: [],
+      avatar: 'avatarfield2',
+      created_at: new Date(),
+      updated_at: new Date(),
+    },
   ];
 
   const hashProvider = {
@@ -83,7 +99,7 @@ describe('Reset Password', () => {
     expect(resetPasswordService).toBeDefined();
   });
 
-  it('Should be able resert password of user', async () => {
+  it('Should be able reset password of user', async () => {
     const result = await resetPasswordService.execute(
       userTokenList[0].token,
       'qwe1232',
@@ -99,7 +115,7 @@ describe('Reset Password', () => {
     expect(hashProvider.generateHash).toBeCalledTimes(1);
   });
 
-  it('Should not be able resert password of user, because not exists valid token', async () => {
+  it('Should not be able reset password of user, because not exists valid token', async () => {
     jest.spyOn(tokensRepository, 'findOne').mockRejectedValueOnce(new Error());
 
     expect(
@@ -116,10 +132,15 @@ describe('Reset Password', () => {
     expect(usersRepository.save).toBeCalledTimes(0);
   });
 
-  it('Should not be able resert password of user, because the passwords no combine', async () => {
+  it('Should not be able reset password of user, because the passwords no combine', async () => {
     expect(
       resetPasswordService.execute(userTokenList[0].token, 'abcde', 'abcdef'),
-    ).rejects.toThrowError();
+    ).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(tokensRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.find).toBeCalledTimes(0);
     expect(usersRepository.findOne).toBeCalledTimes(0);

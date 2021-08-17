@@ -5,20 +5,31 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
 import { SendEmailWithTokenService } from '../../modules/user/services/sendEmailWithToken.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Send Email', () => {
-  const userCreatedEntity: User = new User({
+  const userCreatedEntity: User = {
     name: 'namefield',
     username: 'usernamefield',
     lastname: 'lastnamefield',
     email: 'emailfield@gmail.com',
     password: 'qwe123',
     birthdate: new Date(),
-  });
+    id: 'idfield',
+    bodies: [],
+    avatar: 'avatarfield',
+    created_at: new Date(),
+    updated_at: new Date(),
+  };
 
-  const userTokenList: UserToken = new UserToken({
-    token: '96070bed-c317-4132-ab3c-2ed4bacc9124',
-  });
+  const userTokenList: UserToken = {
+    id: '',
+    user_id: '',
+    token: '',
+    expires_in: undefined,
+    created_at: undefined,
+    updated_at: undefined,
+  };
 
   const emailCreateUserSend = {
     to: userCreatedEntity.email,
@@ -98,7 +109,12 @@ describe('Send Email', () => {
 
     const email = userCreatedEntity.email;
 
-    expect(sendEmailService.execute(email)).rejects.toThrowError();
+    expect(sendEmailService.execute(email)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.findOne).toBeCalledTimes(0);
     expect(tokensRepository.create).toBeCalledTimes(0);

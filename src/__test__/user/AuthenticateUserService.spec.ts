@@ -5,6 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import AuthenticateUserService from '../../modules/user/services/authenticateUser.service';
 import { JwtService } from '@nestjs/jwt';
 import { ICreateSessionDTO } from '../../modules/user/dtos/ICreateSessionDTO';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Authenticate User', () => {
   const userCreatedSession: ICreateSessionDTO = {
@@ -76,18 +77,25 @@ describe('Authenticate User', () => {
   it('Should not be able create session, because user not exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
-    expect(
-      authenticateUserService.execute(userCreatedSession),
-    ).rejects.toThrowError();
+    expect(authenticateUserService.execute(userCreatedSession)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
+
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
   });
 
   it('Should not be able create session, because password no combine whit the of data base', async () => {
     hashProvider.compareHash.mockReturnValueOnce(false);
 
-    expect(
-      authenticateUserService.execute(userCreatedSession),
-    ).rejects.toThrowError();
+    expect(authenticateUserService.execute(userCreatedSession)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
     expect(hashProvider.compareHash).toHaveBeenCalledTimes(1);
   });

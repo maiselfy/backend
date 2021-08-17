@@ -8,8 +8,8 @@ import ListHabitsService from './services/listHabits.service';
 import ViewHabitService from './services/viewHabit.service';
 import DeleteHabitService from './services/deleteHabit.service';
 import UpdateHabitService from './services/updateHabit.service';
-import { EnsureAuthenticatedMiddleware } from 'src/shared/http/middlewares/ensure-authenticated.middleware';
 import User from '../user/infra/typeorm/entities/User';
+import RegisterCheckInHabitService from './services/registerCheckInHabit.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Habit, HabitDayCheck, User])],
   controllers: [HabitController],
@@ -19,6 +19,7 @@ import User from '../user/infra/typeorm/entities/User';
     ListHabitsService,
     UpdateHabitService,
     ViewHabitService,
+    RegisterCheckInHabitService,
   ],
 })
 export class HabitModule implements NestModule {

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import DeleteUserService from '../../modules/user/services/deleteUser.service';
 import ICreateUserDTO from '../../modules/user/dtos/ICreateUserDTO';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Delete User', () => {
   const userCreatedEntity: ICreateUserDTO = {
@@ -74,7 +75,12 @@ describe('Delete User', () => {
   it('Should not be able delete user, because user not exists, action throws exception', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
-    expect(deleteUserService.execute('123')).rejects.toThrowError();
+    expect(deleteUserService.execute('123')).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
     expect(usersRepository.delete).toHaveBeenCalledTimes(0);
   });
