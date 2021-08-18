@@ -11,7 +11,7 @@ export default class GetNoteForHabitService {
     @InjectRepository(Note) private notesRepository: Repository<Note>,
   ) {}
 
-  async execute(id: string, user_id: string, habit_id: string): Promise<Note> {
+  async execute(user_id: string, habit_id: string): Promise<Note[]> {
     try {
       const habit = await this.habitsRepository.findOne({
         where: { id: habit_id },
@@ -35,8 +35,8 @@ export default class GetNoteForHabitService {
         );
       }
 
-      const isTheNoteForHabit = await this.notesRepository.findOne({
-        where: { id },
+      const isTheNoteForHabit = await this.notesRepository.find({
+        where: { habit_id: habit_id, user_id: user_id },
       });
 
       if (!isTheNoteForHabit) {

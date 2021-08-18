@@ -53,12 +53,12 @@ export default class NoteController {
     }
   }
 
-  @Get('getNote/:id/:userId/:habitId')
+  @Get('getNote/:userId/:habitId')
   getNoteForHabit(
     @Param('id') id: string,
     @Param('userId') userId: string,
     @Param('habitId') habitId: string,
-  ): Promise<Note> {
-    return this.getNoteForHabitService.execute(id, userId, habitId);
+  ): Promise<Note[]> {
+    return this.getNoteForHabitService.execute(userId, habitId);
   }
 }
