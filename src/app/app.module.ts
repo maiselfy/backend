@@ -8,7 +8,10 @@ import Body from 'src/modules/user/infra/typeorm/entities/Body';
 import UserToken from 'src/modules/user/infra/typeorm/entities/UserToken';
 import HabitDayCheck from 'src/modules/habit/infra/typeorm/entities/HabitDayCheck';
 import { HabitModule } from 'src/modules/habit/habit.module';
+import { ActivityModule } from 'src/modules/activity/activity.module';
+
 import Habit from 'src/modules/habit/infra/typeorm/entities/Habit';
+import Note from 'src/modules/activity/infra/typeorm/entities/Note';
 
 @Module({
   imports: [
@@ -20,11 +23,12 @@ import Habit from 'src/modules/habit/infra/typeorm/entities/Habit';
       username: process.env.TYPEORM_USERNAME,
       password: process.env.TYPEORM_PASSWORD,
       database: process.env.TYPEORM_DATABASE,
-      entities: [User, Habit, Body, UserToken, HabitDayCheck],
+      entities: [User, Habit, Body, UserToken, HabitDayCheck, Note],
     }),
     //TypeOrmModule.forFeature([User, Body, UserToken, HabitDayCheck]),
     UserModule,
     HabitModule,
+    ActivityModule,
   ],
   controllers: [],
   providers: [AppService],
