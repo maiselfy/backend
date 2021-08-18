@@ -27,6 +27,12 @@ class UserToken {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+  /*
+  constructor(userToken?: Partial<UserToken>) {
+    this.token = userToken.token;
+    this.expires_in = new Date(2030, 10, 10);
+  }
+  */
 }
 
 export default UserToken;
