@@ -117,7 +117,7 @@ export default class HabitController {
     );
   }
 
-  @Get('retrieve/:id')
+  @Get('retrieve/:user_id/:id')
   viewHabitOfUser(
     @Param('id') id: string,
     @Param('user_id') user_id: string,
