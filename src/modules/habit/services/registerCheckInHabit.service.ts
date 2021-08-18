@@ -1,23 +1,31 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import Habit from '../infra/typeorm/entities/Habit';
 import User from 'src/modules/user/infra/typeorm/entities/User';
 import IRegisterCheckInHabitDTO from '../dtos/IRegisterCheckInHabitDTO';
 import HabitDayCheck from '../infra/typeorm/entities/HabitDayCheck';
+import { format } from 'date-fns';
+import { parse } from 'date-fns';
 
 @Injectable()
 export default class RegisterCheckInHabitService {
   constructor(
     @InjectRepository(Habit) private habitsRepository: Repository<Habit>,
     @InjectRepository(User) private usersRepository: Repository<User>,
-    @InjectRepository(User)
+    @InjectRepository(HabitDayCheck)
     private daysCheckRepository: Repository<HabitDayCheck>,
   ) {}
 
   async execute({
     user_id,
     habit_id,
+    date,
   }: IRegisterCheckInHabitDTO): Promise<HabitDayCheck> {
     try {
       const user = await this.usersRepository.findOne({
@@ -49,16 +57,33 @@ export default class RegisterCheckInHabitService {
         );
       }
 
+      const dateFormatted = new Date(date);
+      dateFormatted.setHours(0, 0, 0, 0);
+
+      const checkAlreadyExists = await this.daysCheckRepository.find({
+        where: {
+          user_id,
+          habit_id,
+          date: dateFormatted,
+        },
+      });
+
+      if (checkAlreadyExists === [])
+        throw new UnauthorizedException('This date is already marked');
+
       const checkInHabit = this.daysCheckRepository.create({
         user_id,
         habit_id,
-        date: new Date().getDate(),
+        date: dateFormatted,
       });
 
       await this.daysCheckRepository.save(checkInHabit);
 
       return checkInHabit;
-    } catch {
+    } catch (error) {
+      console.log(error);
+      if (error) throw error;
+
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

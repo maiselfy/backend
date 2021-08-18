@@ -53,6 +53,7 @@ class User {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
 
+
   @Expose()
   get fullName(): string {
     return `${this.name} ${this.lastname}`;

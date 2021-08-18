@@ -31,7 +31,7 @@ export default class CreateHabitService {
           HttpStatus.NOT_FOUND,
         );
 
-      if (buddy_id !== null) {
+      if (buddy_id != undefined) {
         const buddy = await this.usersRepository.findOne({
           where: { id: buddy_id },
         });
@@ -42,20 +42,30 @@ export default class CreateHabitService {
             HttpStatus.NOT_FOUND,
           );
         }
+
+        const habit = this.habitsRepository.create({
+          user_id,
+          name,
+          description,
+          objective,
+          color,
+        });
+
+        await this.habitsRepository.save(habit);
       }
 
       const habit = this.habitsRepository.create({
+        user_id,
         name,
         description,
         objective,
         color,
-        buddy_id,
       });
 
       await this.habitsRepository.save(habit);
 
       return habit;
-    } catch {
+    } catch (error) {
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

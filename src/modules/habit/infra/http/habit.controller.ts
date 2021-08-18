@@ -19,6 +19,7 @@ import DeleteHabitService from '../../services/deleteHabit.service';
 import ListHabitsService from '../../services/listHabits.service';
 import ViewHabitService from '../../services/viewHabit.service';
 import IUpdateHabitDTO from '../../dtos/IUpdateHabitDTO';
+import GetCurrentWeekFrequency from '../../services/getCurrentWeekFrequency.service';
 
 @Controller('habit')
 export default class HabitController {
@@ -28,6 +29,7 @@ export default class HabitController {
     private deleteHabitService: DeleteHabitService,
     private listHabitsService: ListHabitsService,
     private viewHabitService: ViewHabitService,
+    private getCurrentWeekFrequency: GetCurrentWeekFrequency,
   ) {}
 
   @Get('/habit')
@@ -78,11 +80,44 @@ export default class HabitController {
   }
 
   @Get('list/:id')
-  listHabitsForUser(@Param('id') id: string): Promise<Habit[]> {
-    return this.listHabitsService.execute(id);
+  async listHabitsForUser(@Param('id') id: string): Promise<any> {
+    const habits = await this.listHabitsService.execute(id);
+    return Promise.all(
+      habits.map(async (habit: Habit) => {
+        const currentWeekFrequency = await this.getCurrentWeekFrequency.execute(
+          {
+            habitId: habit.id,
+            userId: id,
+          },
+        );
+
+        let numDaysChecked = 0;
+        const stabilityChartData = [];
+
+        for (const frequency in currentWeekFrequency) {
+          if (currentWeekFrequency[frequency].checked === true) {
+            numDaysChecked += 1;
+            stabilityChartData.push(1);
+          } else {
+            stabilityChartData.push(0);
+          }
+        }
+
+        const stabilityAverage = (numDaysChecked / 7) * 100;
+
+        return {
+          ...habit,
+          currentWeekFrequency,
+          stability: {
+            avg: stabilityAverage.toFixed(2),
+            stabilityChartData,
+          },
+        };
+      }),
+    );
   }
 
-  @Get('retrieve/id')
+  @Get('retrieve/:id')
   viewHabitOfUser(
     @Param('id') id: string,
     @Param('user_id') user_id: string,

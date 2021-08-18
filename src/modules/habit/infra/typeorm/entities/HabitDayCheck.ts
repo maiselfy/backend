@@ -5,12 +5,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('habits')
+@Entity('habits-days-check')
 class HabitDayCheck {
   @PrimaryGeneratedColumn('uuid')
   id: string;
