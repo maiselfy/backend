@@ -7,24 +7,24 @@ import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-const habitEntity: IUpdateHabitDTO = new Habit({
-  name: 'nome do habito',
-  description: 'levantar cedo',
-  objective: 'acordar cedo',
-  color: '#fff',
-  buddy_id: '1235',
-});
-
-const userEntity: ICreateUserDTO = new User({
-  name: 'namefield2',
-  username: 'usernamefield2',
-  lastname: 'lastnamefield2',
-  email: 'emailfail2@gmail.com',
-  password: 'qwe1232',
-  birthdate: new Date(),
-});
-
 describe('update habit', () => {
+  const habitEntity: IUpdateHabitDTO = {
+    name: 'levantar cedo',
+    description: 'levantar cedo',
+    objective: 'acordar cedo',
+    color: '#fff',
+    buddy_id: '1234',
+  };
+
+  const userEntity: ICreateUserDTO = {
+    username: 'noobmaster69',
+    name: 'john',
+    lastname: 'doe',
+    email: 'teste@gmail.com',
+    password: '12345',
+    birthdate: new Date(),
+  };
+
   let updateHabitService: UpdateHabitService;
   let habitRepository: Repository<Habit>;
   let usersRepository: Repository<User>;
@@ -71,7 +71,7 @@ describe('update habit', () => {
     const result = await updateHabitService.execute('1', '1235', data);
     expect(result).toEqual(habitEntity);
     expect(usersRepository.findOne).toBeCalledTimes(1);
-    expect(habitRepository.findOne).toBeCalledTimes(1);
+    expect(habitRepository.findOne).toBeCalledTimes(2);
     expect(habitRepository.merge).toBeCalledTimes(1);
     expect(habitRepository.save).toBeCalledTimes(1);
   });

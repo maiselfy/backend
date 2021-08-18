@@ -4,27 +4,28 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
 import CreateHabitService from '../../modules/habit/services/createHabit.service';
 import User from '../../modules/user/infra/typeorm/entities/User';
-import ICreateUserDTO from '../../modules/user/dtos/ICreateUserDTO';
 import ICreateHabitDTO from '../../modules/habit/dtos/ICreateHabitDTO';
-
-const habitEntityList: ICreateHabitDTO = new Habit({
-  user_id: '1234',
-  description: 'levantar cedo',
-  objective: 'acordar cedo',
-  color: '#fff',
-  buddy_id: '1234',
-});
-
-const userEntityList: ICreateUserDTO = new User({
-  name: 'namefield2',
-  username: 'usernamefield2',
-  lastname: 'lastnamefield2',
-  email: 'emailfail2@gmail.com',
-  password: 'qwe1232',
-  birthdate: new Date(),
-});
+import ICreateUserDTO from 'src/modules/user/dtos/ICreateUserDTO';
 
 describe('create habit', () => {
+  const habitEntity: ICreateHabitDTO = {
+    name: 'nome do habito',
+    user_id: '1234',
+    description: 'levantar cedo',
+    objective: 'acordar cedo',
+    color: '#fff',
+    buddy_id: '1234',
+  };
+
+  const userEntity: ICreateUserDTO = {
+    username: 'noobmaster69',
+    name: 'john',
+    lastname: 'doe',
+    email: 'teste@gmail.com',
+    password: '12345',
+    birthdate: new Date(),
+  };
+
   let habitService: CreateHabitService;
   let userRepository: Repository<User>;
   let habitRepository: Repository<Habit>;
@@ -36,14 +37,14 @@ describe('create habit', () => {
         {
           provide: getRepositoryToken(Habit),
           useValue: {
-            create: jest.fn().mockReturnValue(habitEntityList),
-            save: jest.fn().mockResolvedValue(habitEntityList), //confirmando que ele ta sendo salvo, mas ele ja tava criado em algum lugar
+            create: jest.fn().mockReturnValue(habitEntity),
+            save: jest.fn().mockResolvedValue(habitEntity), //confirmando que ele ta sendo salvo, mas ele ja tava criado em algum lugar
           },
         },
         {
           provide: getRepositoryToken(User),
           useValue: {
-            findOne: jest.fn().mockReturnValue(userEntityList),
+            findOne: jest.fn().mockReturnValue(userEntity),
           },
         },
       ],
@@ -60,17 +61,18 @@ describe('create habit', () => {
   });
 
   it('should be able to create a new habit', async () => {
-    const data: ICreateHabitDTO = new Habit({
+    const data: ICreateHabitDTO = {
+      name: 'nome do habito',
       user_id: '1234',
       description: 'levantar cedo',
       objective: 'acordar cedo',
       color: '#fff',
       buddy_id: '1234',
-    });
+    };
 
     const result = await habitService.execute(data);
 
-    expect(result).toEqual(habitEntityList);
+    expect(result).toEqual(habitEntity);
     expect(userRepository.findOne).toBeCalledTimes(2);
     expect(habitRepository.create).toBeCalledTimes(1);
     expect(habitRepository.save).toBeCalledTimes(1);
@@ -79,13 +81,14 @@ describe('create habit', () => {
   it('should not be able a create a habit with user_id nullable', async () => {
     jest.spyOn(userRepository, 'findOne').mockRejectedValueOnce(new Error()); //remockando uma função pra dar erro uma vez e depois do teste ela vai voltar a ser oque era antes no provider
 
-    const data: ICreateHabitDTO = new Habit({
+    const data: ICreateHabitDTO = {
+      name: 'nome do habito',
       user_id: '1234',
       description: 'levantar cedo',
       objective: 'acordar cedo',
       color: '#fff',
       buddy_id: '1234',
-    });
+    };
 
     expect(habitService.execute(data)).rejects.toThrowError();
     expect(userRepository.findOne).toBeCalledTimes(1);

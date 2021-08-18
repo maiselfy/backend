@@ -5,24 +5,26 @@ import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-const habitEntity = [
-  new Habit({
-    user_id: '1234',
-    description: 'levantar cedo',
-    objective: 'acordar cedo',
-    color: '#fff',
-    buddy_id: '1234',
-  }),
-  new Habit({
-    user_id: '1234',
-    description: 'levantar cedo',
-    objective: 'acordar cedo',
-    color: '#fff',
-    buddy_id: '1234',
-  }),
-];
-
 describe('list habits', () => {
+  const habitEntityList = [
+    {
+      name: 'nome do habito',
+      user_id: '1234',
+      description: 'levantar cedo',
+      objective: 'acordar cedo',
+      color: '#fff',
+      buddy_id: '1234',
+    },
+    {
+      name: 'nome do habito',
+      user_id: '1234',
+      description: 'levantar cedo',
+      objective: 'acordar cedo',
+      color: '#fff',
+      buddy_id: '1234',
+    },
+  ];
+
   let listHabitService: ListHabitsService;
   let habitRepository: Repository<Habit>;
 
@@ -33,7 +35,7 @@ describe('list habits', () => {
         {
           provide: getRepositoryToken(Habit),
           useValue: {
-            find: jest.fn().mockReturnValue(habitEntity),
+            find: jest.fn().mockReturnValue(habitEntityList),
           },
         },
         {
@@ -55,7 +57,7 @@ describe('list habits', () => {
 
   it('should be able to list habits', async () => {
     const result = await listHabitService.execute('1');
-    expect(result.length).toEqual(habitEntity.length);
+    expect(result.length).toEqual(habitEntityList.length);
     expect(habitRepository.find).toBeCalledTimes(1);
   });
 });
