@@ -10,9 +10,18 @@ import DeleteHabitService from './services/deleteHabit.service';
 import UpdateHabitService from './services/updateHabit.service';
 import User from '../user/infra/typeorm/entities/User';
 import RegisterCheckInHabitService from './services/registerCheckInHabit.service';
+import GetCurrentWeekFrequency from './services/getCurrentWeekFrequency.service';
+import HabitDayCheckController from './infra/http/habitDayCheck.controller';
+import RemoveCheckInHabitService from './services/removeCheckInHabit.service';
+import GetFrequencyForHabitsService from './services/getFrequencyForHabits.service';
+import GetDataForHeatmapService from './services/getDataForHeatmap.service';
+import GetChecksOnIntervalService from './services/getChecksOnInterval.service';
+import GetDataForHeatmapOfYearService from './services/getDataForHeatpmarOfYear.service';
+import CalculateEstabilityRateService from './services/calculateEstabilityRate.service';
+import CalculateEstabilityRateGenerallyService from './services/calculateEsatiblityRateGenerally.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Habit, HabitDayCheck, User])],
-  controllers: [HabitController],
+  controllers: [HabitController, HabitDayCheckController],
   providers: [
     CreateHabitService,
     DeleteHabitService,
@@ -20,6 +29,14 @@ import RegisterCheckInHabitService from './services/registerCheckInHabit.service
     UpdateHabitService,
     ViewHabitService,
     RegisterCheckInHabitService,
+    GetCurrentWeekFrequency,
+    RemoveCheckInHabitService,
+    GetFrequencyForHabitsService,
+    GetDataForHeatmapService,
+    GetChecksOnIntervalService,
+    GetDataForHeatmapOfYearService,
+    CalculateEstabilityRateService,
+    CalculateEstabilityRateGenerallyService,
   ],
 })
 export class HabitModule implements NestModule {

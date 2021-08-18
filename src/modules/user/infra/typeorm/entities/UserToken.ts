@@ -27,6 +27,7 @@ class UserToken {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+  
   /*
   constructor(userToken?: Partial<UserToken>) {
     this.token = userToken.token;
