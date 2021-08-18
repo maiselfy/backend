@@ -1,10 +1,10 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import Habit from '../infra/typeorm/entities/Habit';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import Habit from '../../habit/infra/typeorm/entities/Habit';
+import User from '../../user/infra/typeorm/entities/User';
 import IRegisterCheckInHabitDTO from '../dtos/IRegisterCheckInHabitDTO';
-import HabitDayCheck from '../infra/typeorm/entities/HabitDayCheck';
+import HabitDayCheck from '../../habit/infra/typeorm/entities/HabitDayCheck';
 
 @Injectable()
 export default class RegisterCheckInHabitService {
@@ -48,6 +48,8 @@ export default class RegisterCheckInHabitService {
           HttpStatus.UNAUTHORIZED,
         );
       }
+
+      console.log('teste');
 
       const checkInHabit = this.daysCheckRepository.create({
         user_id,
