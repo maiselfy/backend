@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import AuthenticateUserService from '../../modules/user/services/authenticateUser.service';
+import AuthenticateUserService from '../../../modules/user/services/authenticateUser.service';
 import { JwtService } from '@nestjs/jwt';
-import { ICreateSessionDTO } from '../../modules/user/dtos/ICreateSessionDTO';
+import { ICreateSessionDTO } from '../../../modules/user/dtos/ICreateSessionDTO';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Authenticate User', () => {

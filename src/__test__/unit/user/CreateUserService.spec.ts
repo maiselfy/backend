@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SendGridModule, SendGridService } from '@ntegral/nestjs-sendgrid';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
-import CreateUserService from '../../modules/user/services/createUser.service';
+import CreateUserService from '../../../modules/user/services/createUser.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import ICreateUserDTO from '../../modules/user/dtos/ICreateUserDTO';
+import ICreateUserDTO from '../../../modules/user/dtos/ICreateUserDTO';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Create User', () => {

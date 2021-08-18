@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SendGridModule, SendGridService } from '@ntegral/nestjs-sendgrid';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
-import { SendEmailWithTokenService } from '../../modules/user/services/sendEmailWithToken.service';
+import UserToken from '../../../modules/user/infra/typeorm/entities/UserToken';
+import { SendEmailWithTokenService } from '../../../modules/user/services/sendEmailWithToken.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Send Email', () => {

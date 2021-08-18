@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import Friendship from '../../modules/friendship/infra/typeorm/entities/Friendship';
-import User from '../../modules/user/infra/typeorm/entities/User';
-import SearchBuddyByNameService from '../../modules/friendship/services/searchBuddyByName.service';
+import Friendship from '../../../modules/friendship/infra/typeorm/entities/Friendship';
+import User from '../../../modules/user/infra/typeorm/entities/User';
+import SearchBuddyByNameService from '../../../modules/friendship/services/searchBuddyByName.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Search Buddys', () => {

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
-import ViewHabitService from '../../modules/habit/services/viewHabit.service';
+import Habit from '../../../modules/habit/infra/typeorm/entities/Habit';
+import ViewHabitService from '../../../modules/habit/services/viewHabit.service';
 
 describe('view habits service', () => {
   const habitentity = {

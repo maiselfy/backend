@@ -1,9 +1,9 @@
-import DeleteHabitService from '../../modules/habit/services/deleteHabit.service';
+import DeleteHabitService from '../../../modules/habit/services/deleteHabit.service';
 import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
-import ICreateHabitDTO from '../../modules/habit/dtos/ICreateHabitDTO';
+import Habit from '../../../modules/habit/infra/typeorm/entities/Habit';
+import ICreateHabitDTO from '../../../modules/habit/dtos/ICreateHabitDTO';
 
 describe('delete habit', () => {
   const habityEntity: ICreateHabitDTO = {

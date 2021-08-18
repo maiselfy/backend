@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import ListHabitsService from '../../modules/habit/services/listHabits.service';
-import User from '../../modules/user/infra/typeorm/entities/User';
-import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
+import ListHabitsService from '../../../modules/habit/services/listHabits.service';
+import User from '../../../modules/user/infra/typeorm/entities/User';
+import Habit from '../../../modules/habit/infra/typeorm/entities/Habit';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import ICreateUserDTO from 'src/modules/user/dtos/ICreateUserDTO';
+import ICreateUserDTO from '../../../modules/user/dtos/ICreateUserDTO';
 
 describe('list habits', () => {
   const habitEntityList = [

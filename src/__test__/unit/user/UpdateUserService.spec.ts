@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import UpdateUserService from '../../modules/user/services/updateUser.service';
-import IUpdateUserDTO from '../../modules/user/dtos/IUpdateUserDTO.interface';
+import UpdateUserService from '../../../modules/user/services/updateUser.service';
+import IUpdateUserDTO from '../../../modules/user/dtos/IUpdateUserDTO.interface';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Update User', () => {

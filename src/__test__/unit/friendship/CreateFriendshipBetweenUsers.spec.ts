@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import Friendship from '../../modules/friendship/infra/typeorm/entities/Friendship';
-import User from '../../modules/user/infra/typeorm/entities/User';
-import CreateFriendshipBetweenUsersService from '../../modules/friendship/services/createFriendshipBetweenUsers.service';
-import ICreateFriendshipBetweenUsersDTO from '../../modules/friendship/dtos/ICreateFriendshipBetweenUsersDTO';
+import Friendship from '../../../modules/friendship/infra/typeorm/entities/Friendship';
+import User from '../../../modules/user/infra/typeorm/entities/User';
+import CreateFriendshipBetweenUsersService from '../../../modules/friendship/services/createFriendshipBetweenUsers.service';
+import ICreateFriendshipBetweenUsersDTO from '../../../modules/friendship/dtos/ICreateFriendshipBetweenUsersDTO';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Create Friendship', () => {

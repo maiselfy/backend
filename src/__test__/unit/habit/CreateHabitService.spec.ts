@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
-import CreateHabitService from '../../modules/habit/services/createHabit.service';
-import User from '../../modules/user/infra/typeorm/entities/User';
-import ICreateHabitDTO from '../../modules/habit/dtos/ICreateHabitDTO';
-import ICreateUserDTO from 'src/modules/user/dtos/ICreateUserDTO';
+import Habit from '../../../modules/habit/infra/typeorm/entities/Habit';
+import CreateHabitService from '../../../modules/habit/services/createHabit.service';
+import User from '../../../modules/user/infra/typeorm/entities/User';
+import ICreateHabitDTO from '../../../modules/habit/dtos/ICreateHabitDTO';
+import ICreateUserDTO from '../../../modules/user/dtos/ICreateUserDTO';
 
 describe('create habit', () => {
   const habitEntity: ICreateHabitDTO = {

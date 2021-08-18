@@ -1,8 +1,8 @@
-import ICreateUserDTO from '../../modules/user/dtos/ICreateUserDTO';
-import IUpdateHabitDTO from '../../modules/habit/dtos/IUpdateHabitDTO';
-import UpdateHabitService from '../../modules/habit/services/updateHabit.service';
-import User from '../../modules/user/infra/typeorm/entities/User';
-import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
+import ICreateUserDTO from '../../../modules/user/dtos/ICreateUserDTO';
+import IUpdateHabitDTO from '../../../modules/habit/dtos/IUpdateHabitDTO';
+import UpdateHabitService from '../../../modules/habit/services/updateHabit.service';
+import User from '../../../modules/user/infra/typeorm/entities/User';
+import Habit from '../../../modules/habit/infra/typeorm/entities/Habit';
 import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
