@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ResetPasswordService } from '../../modules/user/services/resetPassword.service';
-import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
+import { ResetPasswordService } from '../../../modules/user/services/resetPassword.service';
+import UserToken from '../../../modules/user/infra/typeorm/entities/UserToken';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Reset Password', () => {

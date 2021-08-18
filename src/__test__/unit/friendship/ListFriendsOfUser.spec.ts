@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import Friendship from '../../modules/friendship/infra/typeorm/entities/Friendship';
-import User from '../../modules/user/infra/typeorm/entities/User';
-import SearchFriendOfUserService from '../../modules/friendship/services/searchFriendOfUser.service';
+import Friendship from '../../../modules/friendship/infra/typeorm/entities/Friendship';
+import User from '../../../modules/user/infra/typeorm/entities/User';
+import ListFriendsOfUserService from '../../../modules/friendship/services/listFriendsOfUser.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-describe('Search Friends', () => {
+describe('List Friends', () => {
   const userCreatedList: Array<User> = [
     {
       id: 'idfield',
@@ -63,12 +63,12 @@ describe('Search Friends', () => {
 
   let usersRepository: Repository<User>;
   let friendshipRepository: Repository<Friendship>;
-  let searchFriendsService: SearchFriendOfUserService;
+  let listFriendshipService: ListFriendsOfUserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        SearchFriendOfUserService,
+        ListFriendsOfUserService,
         {
           provide: getRepositoryToken(User),
           useValue: {
@@ -92,33 +92,44 @@ describe('Search Friends', () => {
       getRepositoryToken(Friendship),
     );
 
-    searchFriendsService = module.get<SearchFriendOfUserService>(
-      SearchFriendOfUserService,
+    listFriendshipService = module.get<ListFriendsOfUserService>(
+      ListFriendsOfUserService,
     );
   });
 
-  it('Should be able defined create search friends service', () => {
-    expect(searchFriendsService).toBeDefined();
+  it('Should be able defined create friendship service', () => {
+    expect(listFriendshipService).toBeDefined();
   });
 
-  it('Should be able list all friends of current user', async () => {
+  it('Should be able list friend to user current', async () => {
     const data = 'user_idfield';
-    const data_2 = 'namefield';
 
-    const result = await searchFriendsService.execute(data, data_2);
+    const result = await listFriendshipService.execute(data);
 
     expect(result).toEqual(friendshipCreatedList);
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(friendshipRepository.find).toBeCalledTimes(1);
   });
 
-  it('Should not be able list all friends of current user, because current user not exists', async () => {
+  it('Should not be able list friend to user current, becuase user current not exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
-
     const data = 'user_idfield';
-    const data_2 = 'namefield';
 
-    expect(searchFriendsService.execute(data, data_2)).rejects.toEqual(
+    expect(listFriendshipService.execute(data)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
+    expect(usersRepository.findOne).toBeCalledTimes(1);
+    expect(friendshipRepository.find).toBeCalledTimes(0);
+  });
+
+  it('Should not be able list friend to user current, becuase friends to current not exists', async () => {
+    jest.spyOn(friendshipRepository, 'find').mockRejectedValueOnce(new Error());
+    const data = 'user_idfield';
+
+    expect(listFriendshipService.execute(data)).rejects.toEqual(
       new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

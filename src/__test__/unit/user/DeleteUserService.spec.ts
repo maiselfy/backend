@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import DeleteUserService from '../../modules/user/services/deleteUser.service';
-import ICreateUserDTO from '../../modules/user/dtos/ICreateUserDTO';
+import DeleteUserService from '../../../modules/user/services/deleteUser.service';
+import ICreateUserDTO from '../../../modules/user/dtos/ICreateUserDTO';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Delete User', () => {
