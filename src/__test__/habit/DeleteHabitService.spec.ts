@@ -5,22 +5,23 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import Habit from '../../modules/habit/infra/typeorm/entities/Habit';
 import ICreateHabitDTO from '../../modules/habit/dtos/ICreateHabitDTO';
 
-const habityEntity: ICreateHabitDTO = new Habit({
-  user_id: '1234',
-  description: 'levantar cedo',
-  objective: 'acordar cedo',
-  color: '#fff',
-  buddy_id: '1234',
-});
-
-const habitSuccessuflyDelete = {
-  raw: 0,
-  affected: 1,
-};
-
 describe('delete habit', () => {
-  let deleteHabitService: DeleteHabitService;
+  const habityEntity: ICreateHabitDTO = {
+    name: 'nome do habito',
+    user_id: '1234',
+    description: 'levantar cedo',
+    objective: 'acordar cedo',
+    color: '#fff',
+    buddy_id: '1234',
+  };
+
+  const habitSuccessuflyDelete = {
+    raw: 0,
+    affected: 1,
+  };
+
   let habitRepository: Repository<Habit>;
+  let deleteHabitService: DeleteHabitService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -40,15 +41,15 @@ describe('delete habit', () => {
     deleteHabitService = module.get<DeleteHabitService>(DeleteHabitService);
   });
 
-  it('should be able service defined', async () => {
+  it('should be able service defined', () => {
     expect(deleteHabitService).toBeDefined();
   });
 
   it('should be able a delete a service', async () => {
     const result = await deleteHabitService.execute('1', '1');
 
-    expect(result).toEqual(true);
-    expect(habitRepository.findOne).toBeCalledTimes(1);
+    expect(result).toMatchObject({ affected: 1, raw: 0 });
+    expect(habitRepository.findOne).toBeCalledTimes(2);
   });
 
   it('should not be able to delete a habit with nullable id', async () => {
@@ -68,8 +69,8 @@ describe('delete habit', () => {
       .mockResolvedValueOnce(habitSuccessuflyDelete);
     const result = await deleteHabitService.execute('1', '1');
 
-    expect(result).toEqual(false);
-    expect(habitRepository.findOne).toHaveBeenCalledTimes(1);
+    expect(result).toMatchObject({ affected: 0, raw: 1 });
+    expect(habitRepository.findOne).toHaveBeenCalledTimes(2);
     expect(habitRepository.delete).toHaveBeenCalledTimes(1);
 
     habitSuccessuflyDelete.raw = 0;

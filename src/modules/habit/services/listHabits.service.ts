@@ -30,7 +30,10 @@ export default class ListHabitsService {
 
       if (haveHabits === 0 || null) {
         throw new HttpException(
-          'Sorry, this user has no registered habits',
+          {
+            message: 'Sorry, this user has no registered habits',
+            code: HttpStatus.NOT_FOUND,
+          },
           HttpStatus.NOT_FOUND,
         );
       }
