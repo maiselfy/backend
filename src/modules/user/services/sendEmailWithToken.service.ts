@@ -39,17 +39,24 @@ export class SendEmailWithTokenService {
       });
 
       await this.userTokensRepository.save(userToken);
-      await this.sendgrid.send({
-        to: user.email,
-        from: 'no-reply@maiself.com.br',
-        subject: 'Maiself - Alteração de senha',
-        templateId: 'd-cb35dfd58fb7480f86cfa62ec1687d83',
-        dynamicTemplateData: { token: userToken.token },
-      });
+      await this.sendgrid
+        .send({
+          to: user.email,
+          from: 'no-reply@maiself.com.br',
+          subject: 'Maiself - Alteração de senha',
+          templateId: 'd-cb35dfd58fb7480f86cfa62ec1687d83',
+          dynamicTemplateData: { token: userToken.token },
+        })
+        .catch(error => {
+          console.error(error.response.body);
+        });
 
       return userToken;
     } catch (error) {
-      console.error(error.response.body);
+      throw new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

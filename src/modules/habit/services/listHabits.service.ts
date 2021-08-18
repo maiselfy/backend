@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import Habit from '../infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../user/infra/typeorm/entities/User';
 
 @Injectable()
 export default class ListHabitsService {
@@ -30,7 +30,10 @@ export default class ListHabitsService {
 
       if (haveHabits === 0 || null) {
         throw new HttpException(
-          'Sorry, this user has no registered habits',
+          {
+            message: 'Sorry, this user has no registered habits',
+            code: HttpStatus.NOT_FOUND,
+          },
           HttpStatus.NOT_FOUND,
         );
       }

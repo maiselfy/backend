@@ -2,13 +2,11 @@ import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import Habit from '../infra/typeorm/entities/Habit';
-import User from 'src/modules/user/infra/typeorm/entities/User';
 
 @Injectable()
 export default class DeleteHabitService {
   constructor(
     @InjectRepository(Habit) private habitsRepository: Repository<Habit>,
-    @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
   async execute(id: string, user_id: string): Promise<DeleteResult> {

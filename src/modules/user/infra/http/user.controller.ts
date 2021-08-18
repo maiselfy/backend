@@ -77,11 +77,13 @@ export class UserController {
   @Put(':id')
   updateUser(
     @Param('id') id: string,
-    @Body() { name, lastname, email, password, birthdate }: IUpdateUserDTO,
+    @Body()
+    { name, lastname, username, email, password, birthdate }: IUpdateUserDTO,
   ): Promise<User> {
     return this.updateUserService.execute(id, {
       name,
       lastname,
+      username,
       email,
       password,
       birthdate,

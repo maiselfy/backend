@@ -17,25 +17,32 @@ export default class UpdateUserAvatarService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
   async execute({ userId, avatarFilename }: Request): Promise<User> {
-    const user = await this.usersRepository.findOne(userId);
-    if (!user) {
+    try {
+      const user = await this.usersRepository.findOne(userId);
+      if (!user) {
+        throw new HttpException(
+          'Only authenticated users can chage avatar',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      if (user.avatar) {
+        const userAvatarFilePath = join(uploadConfig.directory, user.avatar);
+        const userAvatarFileExists = await promises.stat(userAvatarFilePath);
+
+        if (userAvatarFileExists) {
+          await promises.unlink(userAvatarFilePath);
+        }
+      }
+
+      user.avatar = avatarFilename;
+      await this.usersRepository.save(user);
+      return user;
+    } catch {
       throw new HttpException(
-        'Only authenticated users can chage avatar',
-        HttpStatus.UNAUTHORIZED,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    if (user.avatar) {
-      const userAvatarFilePath = join(uploadConfig.directory, user.avatar);
-      const userAvatarFileExists = await promises.stat(userAvatarFilePath);
-
-      if (userAvatarFileExists) {
-        await promises.unlink(userAvatarFilePath);
-      }
-    }
-
-    user.avatar = avatarFilename;
-    await this.usersRepository.save(user);
-    return user;
   }
 }

@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import {
   HttpException,
   HttpStatus,
@@ -56,6 +57,8 @@ export default class RegisterCheckInHabitService {
           HttpStatus.UNAUTHORIZED,
         );
       }
+
+
 
       const dateFormatted = new Date(date);
       dateFormatted.setHours(0, 0, 0, 0);
