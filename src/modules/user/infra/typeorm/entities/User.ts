@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
+import { Exclude, Expose } from 'class-transformer';
+import Friendship from 'src/modules/friendship/infra/typeorm/entities/Friendship';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -18,6 +20,7 @@ class User {
   @Column()
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 
@@ -42,11 +45,19 @@ class User {
   @Column()
   avatar: string;
 
+  @Exclude()
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
+  @Exclude()
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
 
+
+  @Expose()
+  get fullName(): string {
+    return `${this.name} ${this.lastname}`;
+  }
 }
+
 export default User;

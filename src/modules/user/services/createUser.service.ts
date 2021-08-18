@@ -22,36 +22,57 @@ export default class CreateUserService {
     birthdate,
     username,
   }: ICreateUserDTO): Promise<User> {
-    const userExists = await this.usersRepository.findOne({ where: { email } });
-    if (userExists) {
+    try {
+      const emailExists = await this.usersRepository.findOne({
+        where: { email },
+      });
+
+      if (emailExists) {
+        throw new HttpException(
+          'This email already in use, please define another.',
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      const usernameExists = await this.usersRepository.findOne({
+        where: { username },
+      });
+
+      if (usernameExists) {
+        throw new HttpException(
+          'This username already in use, please define another.',
+          HttpStatus.CONFLICT,
+        );
+      }
+      const passwordHash = await this.HashProvider.generateHash(password);
+      const user = this.usersRepository.create({
+        name,
+        lastname,
+        email,
+        password: passwordHash,
+        birthdate,
+        username,
+      });
+      await this.usersRepository.save(user);
+      await this.sendgrid
+        .send({
+          to: email,
+          from: 'no-reply@maiself.com.br',
+          subject: 'Welcome to Maiself',
+          templateId: 'd-edce0598398f458692d26ae47ae5dbda',
+          dynamicTemplateData: {
+            first_name: name,
+          },
+        })
+        .catch(error => {
+          console.error(error.response.body);
+        });
+      return user;
+    } catch {
       throw new HttpException(
-        'This email already in use.',
-        HttpStatus.CONFLICT,
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
       );
     }
-    const passwordHash = await this.HashProvider.generateHash(password);
-    const user = this.usersRepository.create({
-      name,
-      lastname,
-      email,
-      password: passwordHash,
-      birthdate,
-      username,
-    });
-    await this.usersRepository.save(user);
-    await this.sendgrid
-      .send({
-        to: email,
-        from: 'no-reply@maiself.com.br',
-        subject: 'Welcome to Maiself',
-        templateId: 'd-edce0598398f458692d26ae47ae5dbda',
-        dynamicTemplateData: {
-          first_name: name,
-        },
-      })
-      .catch(error => {
-        console.error(error.response.body);
-      });
-    return user;
   }
 }

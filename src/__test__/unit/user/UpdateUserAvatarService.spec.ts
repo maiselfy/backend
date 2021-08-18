@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import IUpdateUserDTO from '../../modules/user/dtos/IUpdateUserDTO.interface';
-import UpdateUserAvatarService from '../../modules/user/services/updateUserAvatar.service';
+import IUpdateUserDTO from '../../../modules/user/dtos/IUpdateUserDTO.interface';
+import UpdateUserAvatarService from '../../../modules/user/services/updateUserAvatar.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Update Avatar', () => {
   interface Request {
@@ -14,6 +15,7 @@ describe('Update Avatar', () => {
   const userUpdate: IUpdateUserDTO | User = {
     name: 'namefield',
     lastname: 'lastnamefield',
+    username: 'usernamefield',
     email: 'emailfield@gmail.com',
     password: 'passwordfield',
     birthdate: new Date(),
@@ -68,7 +70,12 @@ describe('Update Avatar', () => {
       avatarFilename: 'src/__test__/user/UpdateUserAvatarService.spec.ts',
     };
 
-    expect(updateUserAvatarService.execute(data)).rejects.toThrowError();
+    expect(updateUserAvatarService.execute(data)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(usersRepository.save).toBeCalledTimes(0);
   });

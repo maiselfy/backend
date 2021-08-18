@@ -1,43 +1,43 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SendGridModule, SendGridService } from '@ntegral/nestjs-sendgrid';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import UserToken from '../../modules/user/infra/typeorm/entities/UserToken';
-import { SendEmailWithTokenService } from '../../modules/user/services/sendEmailWithToken.service';
+import UserToken from '../../../modules/user/infra/typeorm/entities/UserToken';
+import { SendEmailWithTokenService } from '../../../modules/user/services/sendEmailWithToken.service';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Send Email', () => {
-  const userCreatedEntityList: Array<User> = [
-    new User({
-      name: 'namefield',
-      username: 'usernamefield',
-      lastname: 'lastnamefield',
-      email: 'emailfield@gmail.com',
-      password: 'qwe123',
-      birthdate: new Date(),
-    }),
-    new User({
-      name: 'namefield2',
-      username: 'usernamefield2',
-      lastname: 'lastnamefield2',
-      email: 'emailfield2@gmail.com',
-      password: 'qwe1232',
-      birthdate: new Date(),
-    }),
-  ];
+  const userCreatedEntity: User = {
+    name: 'namefield',
+    username: 'usernamefield',
+    lastname: 'lastnamefield',
+    email: 'emailfield@gmail.com',
+    password: 'qwe123',
+    birthdate: new Date(),
+    id: 'idfield',
+    bodies: [],
+    avatar: 'avatarfield',
+    created_at: new Date(),
+    updated_at: new Date(),
+    fullName: 'fullnamefield',
+  };
 
-  const userTokenList: Array<UserToken> = [
-    new UserToken({
-      token: '96070bed-c317-4132-ab3c-2ed4bacc9124',
-    }),
-  ];
+  const userTokenList: UserToken = {
+    id: '',
+    user_id: '',
+    token: '',
+    expires_in: undefined,
+    created_at: undefined,
+    updated_at: undefined,
+  };
 
   const emailCreateUserSend = {
-    to: userCreatedEntityList[0].email,
+    to: userCreatedEntity.email,
     from: 'no-reply@maiself.com.br',
     subject: 'Maiself - Alteração de senha',
     templateId: 'd-cb35dfd58fb7480f86cfa62ec1687d83',
-    dynamicTemplateData: { token: userTokenList[0].token },
+    dynamicTemplateData: { token: userTokenList.token },
   };
 
   let tokensRepository: Repository<UserToken>;
@@ -57,15 +57,15 @@ describe('Send Email', () => {
         {
           provide: getRepositoryToken(UserToken),
           useValue: {
-            findOne: jest.fn().mockReturnValue(userTokenList[0]),
-            create: jest.fn().mockReturnValue(userTokenList[0]),
-            save: jest.fn().mockReturnValue(userTokenList[0]),
+            findOne: jest.fn().mockReturnValue(userTokenList),
+            create: jest.fn().mockReturnValue(userTokenList),
+            save: jest.fn().mockReturnValue(userTokenList),
           },
         },
         {
           provide: getRepositoryToken(User),
           useValue: {
-            findOne: jest.fn().mockReturnValue(userCreatedEntityList[0]),
+            findOne: jest.fn().mockReturnValue(userCreatedEntity),
           },
         },
         {
@@ -94,11 +94,11 @@ describe('Send Email', () => {
   });
 
   it('Should be able send email', async () => {
-    const email = userCreatedEntityList[0].email;
+    const email = userCreatedEntity.email;
 
     const result = await sendEmailService.execute(email);
 
-    expect(result).toEqual(userTokenList[0]);
+    expect(result).toEqual(userTokenList);
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.create).toBeCalledTimes(1);
@@ -108,9 +108,14 @@ describe('Send Email', () => {
   it('Should not be able send email, because user not exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
-    const email = userCreatedEntityList[0].email;
+    const email = userCreatedEntity.email;
 
-    expect(sendEmailService.execute(email)).rejects.toThrowError();
+    expect(sendEmailService.execute(email)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toBeCalledTimes(1);
     expect(tokensRepository.findOne).toBeCalledTimes(0);
     expect(tokensRepository.create).toBeCalledTimes(0);

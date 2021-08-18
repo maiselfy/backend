@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import User from '../../modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import AuthenticateUserService from '../../modules/user/services/authenticateUser.service';
+import AuthenticateUserService from '../../../modules/user/services/authenticateUser.service';
 import { JwtService } from '@nestjs/jwt';
-import { ICreateSessionDTO } from '../../modules/user/dtos/ICreateSessionDTO';
+import { ICreateSessionDTO } from '../../../modules/user/dtos/ICreateSessionDTO';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('Authenticate User', () => {
   const userCreatedSession: ICreateSessionDTO = {
@@ -73,25 +74,29 @@ describe('Authenticate User', () => {
     expect(jwtService.sign).toHaveBeenCalledTimes(1);
   });
 
-  it('Should be not able create session, because user not exists', async () => {
+  it('Should not be able create session, because user not exists', async () => {
     jest.spyOn(usersRepository, 'findOne').mockRejectedValueOnce(new Error());
 
-    expect(
-      authenticateUserService.execute(userCreatedSession),
-    ).rejects.toThrowError();
+    expect(authenticateUserService.execute(userCreatedSession)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
+
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
-    // expect(hashProvider.compareHash).toHaveBeenCalledTimes(0);
-    // expect(jwtService.sign).toHaveBeenCalledTimes(0);
   });
 
-  it('Should be not able create session, because password no combine whit the of data base', async () => {
+  it('Should not be able create session, because password no combine whit the of data base', async () => {
     hashProvider.compareHash.mockReturnValueOnce(false);
 
-    expect(
-      authenticateUserService.execute(userCreatedSession),
-    ).rejects.toThrowError();
+    expect(authenticateUserService.execute(userCreatedSession)).rejects.toEqual(
+      new HttpException(
+        'Sorry, this operation could not be performed, please try again.',
+        HttpStatus.BAD_REQUEST,
+      ),
+    );
     expect(usersRepository.findOne).toHaveBeenCalledTimes(1);
     expect(hashProvider.compareHash).toHaveBeenCalledTimes(1);
-    // expect(jwtService.sign).toHaveBeenCalledTimes(0);
   });
 });
