@@ -21,6 +21,7 @@ describe('Create User', () => {
       avatar: 'avatarfield',
       created_at: new Date(),
       updated_at: new Date(),
+      fullName: 'fullnamefield',
     },
     {
       name: 'namefield2',
@@ -34,6 +35,7 @@ describe('Create User', () => {
       avatar: 'avatarfield2',
       created_at: new Date(),
       updated_at: new Date(),
+      fullName: 'fullnamefield2',
     },
   ];
 

@@ -31,6 +31,7 @@ describe('Reset Password', () => {
       avatar: 'avatarfield',
       created_at: new Date(),
       updated_at: new Date(),
+      fullName: 'fullnamefield',
     },
     {
       name: 'namefield2',
@@ -44,6 +45,7 @@ describe('Reset Password', () => {
       avatar: 'avatarfield2',
       created_at: new Date(),
       updated_at: new Date(),
+      fullName: 'fullnamefield2',
     },
   ];
 

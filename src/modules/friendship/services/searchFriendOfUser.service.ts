@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import Friendship from '../infra/typeorm/entities/Friendship';
 
 @Injectable()
@@ -60,7 +60,6 @@ export default class SearchFriendOfUserService {
       });
       return this.friends;
     } catch (error) {
-      console.log(error);
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

@@ -20,6 +20,7 @@ describe('Send Email', () => {
     avatar: 'avatarfield',
     created_at: new Date(),
     updated_at: new Date(),
+    fullName: 'fullnamefield',
   };
 
   const userTokenList: UserToken = {
