@@ -11,7 +11,7 @@ import GetFrequencyForHabitsService from '../../services/getFrequencyForHabits.s
 import GetDataForHeatmapService from '../../services/getDataForHeatmap.service';
 import GetChecksOnIntervalService from '../../services/getChecksOnInterval.service';
 import CalculateEstabilityRateService from '../../services/calculateEstabilityRate.service';
-import CalculateEstabilityRateGenerallyService from '../../services/calculateEsatiblityRateGenerally.service';
+import CalculateEstabilityRateGenerallyService from '../../services/calculateEstabilityRateGenerally.service';
 
 @Controller('habitCheck')
 export default class HabitDayCheckController {

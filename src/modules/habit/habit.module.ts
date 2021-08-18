@@ -18,7 +18,7 @@ import GetDataForHeatmapService from './services/getDataForHeatmap.service';
 import GetChecksOnIntervalService from './services/getChecksOnInterval.service';
 import GetDataForHeatmapOfYearService from './services/getDataForHeatpmarOfYear.service';
 import CalculateEstabilityRateService from './services/calculateEstabilityRate.service';
-import CalculateEstabilityRateGenerallyService from './services/calculateEsatiblityRateGenerally.service';
+import CalculateEstabilityRateGenerallyService from './services/calculateEstabilityRateGenerally.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Habit, HabitDayCheck, User])],
   controllers: [HabitController, HabitDayCheckController],

@@ -5,8 +5,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('habits-days-check')
-class HabitDayCheck {
+@Entity('notes-habit')
+class Note {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -17,7 +17,7 @@ class HabitDayCheck {
   habit_id: string;
 
   @Column()
-  date: Date;
+  note: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
@@ -26,4 +26,4 @@ class HabitDayCheck {
   updated_at: Date;
 }
 
-export default HabitDayCheck;
+export default Note;
