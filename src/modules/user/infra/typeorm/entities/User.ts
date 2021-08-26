@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Exclude, Expose } from 'class-transformer';
 import Friendship from 'src/modules/friendship/infra/typeorm/entities/Friendship';
 import {
@@ -52,7 +51,6 @@ class User {
   @Exclude()
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
-
 
   @Expose()
   get fullName(): string {

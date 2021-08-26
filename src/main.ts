@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { static as expressStatic } from 'express';
-import { AppModule } from './app/app.module';
+import { AppModule } from './app.module';
 import uploadConfig from './config/upload.config';
 
 async function bootstrap() {

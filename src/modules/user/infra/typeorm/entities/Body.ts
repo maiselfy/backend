@@ -10,7 +10,7 @@ import {
 import User from './User';
 
 @Entity('bodies')
-class Bodies {
+class Body {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -36,4 +36,4 @@ class Bodies {
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
 }
-export default Bodies;
+export default Body;
