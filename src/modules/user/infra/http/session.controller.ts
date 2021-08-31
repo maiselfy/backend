@@ -6,8 +6,8 @@ import AuthenticateUserService from '../../services/authenticateUser.service';
 export class SessionController {
   constructor(private authenticateUserService: AuthenticateUserService) {}
   @Post()
-  createSession(@Body() { email, password }: ICreateSessionDTO) {
-    const session = this.authenticateUserService.execute({
+  async createSession(@Body() { email, password }: ICreateSessionDTO) {
+    const session = await this.authenticateUserService.execute({
       email,
       password,
     });
