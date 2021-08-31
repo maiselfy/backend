@@ -73,7 +73,7 @@ describe('create habit', () => {
     const result = await habitService.execute(data);
 
     expect(result).toEqual(habitEntity);
-    expect(userRepository.findOne).toBeCalledTimes(2);
+    expect(userRepository.findOne).toBeCalledTimes(1);
     expect(habitRepository.create).toBeCalledTimes(1);
     expect(habitRepository.save).toBeCalledTimes(1);
   });

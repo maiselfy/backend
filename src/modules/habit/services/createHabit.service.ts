@@ -31,35 +31,13 @@ export default class CreateHabitService {
           HttpStatus.NOT_FOUND,
         );
 
-      if (buddy_id != undefined) {
-        const buddy = await this.usersRepository.findOne({
-          where: { id: buddy_id },
-        });
-
-        if (!buddy) {
-          throw new HttpException(
-            'It is not possible to perform an operation, as there is no corresponding registered user to be used as a buddy',
-            HttpStatus.NOT_FOUND,
-          );
-        }
-
-        const habit = this.habitsRepository.create({
-          user_id,
-          name,
-          description,
-          objective,
-          color,
-        });
-
-        await this.habitsRepository.save(habit);
-      }
-
       const habit = this.habitsRepository.create({
         user_id,
         name,
         description,
         objective,
         color,
+        buddy_id,
       });
 
       await this.habitsRepository.save(habit);

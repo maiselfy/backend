@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import Habit from '../infra/typeorm/entities/Habit';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import IRegisterCheckInHabitDTO from '../dtos/IRegisterCheckInHabitDTO';
 import HabitDayCheck from '../infra/typeorm/entities/HabitDayCheck';
 import { format } from 'date-fns';
@@ -57,8 +57,6 @@ export default class RegisterCheckInHabitService {
           HttpStatus.UNAUTHORIZED,
         );
       }
-
-
 
       const dateFormatted = new Date(date);
       dateFormatted.setHours(0, 0, 0, 0);
