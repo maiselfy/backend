@@ -54,7 +54,7 @@ export default class RemoveCheckInHabitService {
 
       return this.daysCheckRepository.remove(canBeRemoved);
     } catch (error) {
-      console.log(error);
+      if (error) return error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

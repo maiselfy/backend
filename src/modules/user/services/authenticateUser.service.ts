@@ -43,7 +43,8 @@ export default class AuthenticateUserService {
         lastname: user.lastname,
         email: user.email,
       });
-    } catch {
+    } catch (error) {
+      if (error) return error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

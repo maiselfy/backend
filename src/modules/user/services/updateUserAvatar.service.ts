@@ -38,7 +38,8 @@ export default class UpdateUserAvatarService {
       user.avatar = avatarFilename;
       await this.usersRepository.save(user);
       return user;
-    } catch {
+    } catch (error) {
+      if (error) return error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

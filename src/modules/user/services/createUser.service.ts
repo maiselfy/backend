@@ -68,7 +68,8 @@ export default class CreateUserService {
           console.error(error.response.body);
         });
       return user;
-    } catch {
+    } catch (error) {
+      if (error) return error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

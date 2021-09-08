@@ -44,6 +44,7 @@ export default class CreateHabitService {
 
       return habit;
     } catch (error) {
+      if (error) throw error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
