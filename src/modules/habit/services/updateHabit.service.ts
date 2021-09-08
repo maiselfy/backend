@@ -64,7 +64,8 @@ export default class UpdateHabitService {
       await this.habitsRepository.save(updatedHabit);
 
       return habit;
-    } catch {
+    } catch (error) {
+      if (error) return error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
