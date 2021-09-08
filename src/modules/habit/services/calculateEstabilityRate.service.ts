@@ -38,21 +38,27 @@ export default class CalculateEstabilityRateService {
         );
       }
 
+      const firstRecord = await this.daysCheckRepository.findOne({
+        where: { habit_id: habit.id },
+      });
+
       const today = new Date();
 
-      const diff =
-        Between(habit.created_at.getUTCDate(), today.getUTCDate()).value[1] -
-        Between(habit.created_at.getUTCDate(), today.getUTCDate()).value[0];
+      const differenceBetweenDays =
+        Between(firstRecord.date.getUTCDate(), today.getUTCDate()).value[1] -
+        Between(firstRecord.date.getUTCDate(), today.getUTCDate()).value[0];
 
-      const checks = await this.daysCheckRepository.findAndCount({
+      const checksForHabit = await this.daysCheckRepository.findAndCount({
         where: {
           user_id: userId,
           habit_id: habitId,
-          date: Between(habit.created_at, today),
+          date: Between(firstRecord.date, today),
         },
       });
 
-      const estabilityRate = (checks[1] / diff).toFixed(2);
+      const estabilityRate = (
+        checksForHabit[1] / differenceBetweenDays
+      ).toFixed(2);
       return estabilityRate;
     } catch (error) {
       if (error) throw error;
