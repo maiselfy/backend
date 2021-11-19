@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import IRecoverPasswordDTO from 'src/modules/user/dtos/IRecoverPasswordDTO';
 import ISendEmailWithToken from 'src/modules/user/dtos/ISendEmailWithToken';
 import { ResetPasswordService } from 'src/modules/user/services/resetPassword.service';
@@ -16,10 +16,9 @@ export class RecoverPasswordController {
     return this.sendEmailWithTokenService.execute(email);
   }
 
-  @Post('reset-password/:token')
+  @Post('reset-password')
   resetPassword(
-    @Param('token') token: string,
-    @Body() { password, passwordConfirm }: IRecoverPasswordDTO,
+    @Body() { token, password, passwordConfirm }: IRecoverPasswordDTO,
   ) {
     return this.resetPasswordService.execute(token, password, passwordConfirm);
   }
