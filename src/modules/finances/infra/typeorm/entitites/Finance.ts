@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -45,6 +46,13 @@ class Finance {
   )
   tags: Tag[];
 
+  @Column()
+  user_id: string;
+
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
   @Exclude()
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
@@ -52,12 +60,6 @@ class Finance {
   @Exclude()
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
-
-
-  @Expose()
-  get fullName(): string {
-    return `${this.name} ${this.lastname}`;
-  }
 }
 
 export default Finance;
