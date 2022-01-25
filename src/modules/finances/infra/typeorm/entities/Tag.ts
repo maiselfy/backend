@@ -33,7 +33,6 @@ class Tag {
   @Exclude()
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
-
 }
 
 export default Tag;
