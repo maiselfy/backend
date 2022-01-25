@@ -12,12 +12,14 @@ export default class FinancialBalanceForUserService {
     @InjectRepository(Finance) private financesRepository: Repository<Finance>,
   ) {}
 
-  financialInputs: any[];
-  financialOutputs: any[];
+  financialInputsSum: number;
+  financialOutputsSum: number;
+  financialBalance: number;
 
   async execute({ userId, financeId }): Promise<any> {
-    this.financialInputs = [];
-    this.financialOutputs = [];
+    this.financialInputsSum = 0.0;
+    this.financialOutputsSum = 0.0;
+    this.financialBalance = 0.0;
 
     try {
       const user = await this.usersRepository.findOne({
@@ -31,8 +33,12 @@ export default class FinancialBalanceForUserService {
         );
       }
 
-      const allFinances = await this.financesRepository.find({
+      const financialInputs = await this.financesRepository.find({
         where: { userId, type: 'INPUT' },
+      });
+
+      const financialOutputs = await this.financesRepository.find({
+        where: { userId, type: 'OUTPUT' },
       });
 
       const haveFinances = allFinances.length;
@@ -47,9 +53,17 @@ export default class FinancialBalanceForUserService {
         );
       }
 
-      //allFinances.filter();
+      financialInputs.forEach(input => {
+        financialInputsSum += input.value;
+      });
 
-      return;
+      financialOutputs.forEach(output => {
+        financialOutputsSum += output.value;
+      });
+
+      financialBalance = financialInputsSum - financialOutputsSum;
+
+      return financialBalance;
     } catch (error) {
       if (error) throw error;
       throw new HttpException(

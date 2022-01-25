@@ -46,7 +46,7 @@ class Finance {
 
   @OneToMany(
     () => Tag,
-    tag => tag.user,
+    tag => tag.finance,
   )
   tags: Tag[];
 

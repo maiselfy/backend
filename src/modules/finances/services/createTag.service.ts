@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import ICreateTagDTO from '../dto/ICreateTagDTO';
+import ICreateTagDTO from '../dtos/ICreateTagDTO';
 import Tag from '../infra/typeorm/entities/Tag';
 
 @Injectable()
