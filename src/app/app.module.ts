@@ -15,6 +15,10 @@ import Note from 'src/modules/activity/infra/typeorm/entities/Note';
 import Friendship from 'src/modules/friendship/infra/typeorm/entities/Friendship';
 import { FriendshipModule } from 'src/modules/friendship/friendship.module';
 
+import { FinancesModule } from 'src/modules/finances/finances.module';
+import Finance from 'src/modules/finances/infra/typeorm/entities/Finance';
+import Tag from 'src/modules/finances/infra/typeorm/entities/Tag';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -25,13 +29,24 @@ import { FriendshipModule } from 'src/modules/friendship/friendship.module';
       username: process.env.TYPEORM_USERNAME,
       password: process.env.TYPEORM_PASSWORD,
       database: process.env.TYPEORM_DATABASE,
-      entities: [User, Habit, Body, UserToken, HabitDayCheck, Note, Friendship],
+      entities: [
+        User,
+        Habit,
+        Body,
+        UserToken,
+        HabitDayCheck,
+        Note,
+        Friendship,
+        Finance,
+        Tag,
+      ],
     }),
     //TypeOrmModule.forFeature([User, Body, UserToken, HabitDayCheck]),
     UserModule,
     HabitModule,
     ActivityModule,
     FriendshipModule,
+    FinancesModule,
   ],
   controllers: [],
   providers: [AppService],
