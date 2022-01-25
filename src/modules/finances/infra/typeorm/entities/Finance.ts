@@ -25,7 +25,7 @@ class Finance {
   description: string;
 
   @Column()
-  value: float;
+  value: number;
 
   @Column()
   date: Date;
