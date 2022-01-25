@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';

@@ -2,7 +2,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import User from '../../user/infra/typeorm/entities/User';
-import IUpdateFinanceDTO from '../dtos/IUpdateHabitDTO';
+import IUpdateFinanceDTO from '../dtos/IUpdateFinanceDTO';
+import Finance from '../infra/typeorm/entities/Finance';
 
 @Injectable()
 export default class UpdateFinanceService {

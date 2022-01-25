@@ -1,15 +1,19 @@
 /* eslint-disable prettier/prettier */
 import { Exclude, Expose } from 'class-transformer';
+import User from 'src/modules/user/infra/typeorm/entities/User';
+
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+import Tag from '../entities/Tag'
 
 export enum TypeFinance {
   INPUT = 'input',
