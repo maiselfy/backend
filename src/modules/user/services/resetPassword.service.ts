@@ -33,12 +33,22 @@ export class ResetPasswordService {
         where: { id: userToken.user_id },
       });
 
+      if (!user) {
+        throw new HttpException(
+          'The user this token does not exist in the our database.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
       const user_tokens = await this.userTokensRepository.find({
         where: { user_id: user.id },
       });
 
-      user_tokens.map(e => {
-        if (!isAfter(userToken.created_at, e.created_at) && e.token != token) {
+      user_tokens.map(otherToken => {
+        if (
+          !isAfter(userToken.created_at, otherToken.created_at) &&
+          otherToken.token != token
+        ) {
           throw new HttpException(
             'This token does not active.',
             HttpStatus.UNAUTHORIZED,
@@ -49,6 +59,13 @@ export class ResetPasswordService {
       if (!isAfter(new Date(userToken.expires_in), new Date())) {
         throw new HttpException(
           'This token has expired.',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      if (userToken.used) {
+        throw new HttpException(
+          'This token was used previously.',
           HttpStatus.UNAUTHORIZED,
         );
       }
@@ -66,11 +83,15 @@ export class ResetPasswordService {
         password: passwordHash,
       });
 
+      const updatedUserToken = this.userTokensRepository.merge(userToken, {
+        used: true,
+      });
+
       await this.userRepository.save(updatedUser);
+      await this.userTokensRepository.save(updatedUserToken);
 
       return updatedUser;
     } catch (error) {
-      if (error) return error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,

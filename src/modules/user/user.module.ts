@@ -56,7 +56,10 @@ export class UserModule implements NestModule {
         { method: RequestMethod.POST, path: 'api/session' },
         { method: RequestMethod.POST, path: 'api/user' },
         { method: RequestMethod.POST, path: 'api/forgot-password' },
-        { method: RequestMethod.POST, path: 'api/reset-password/:token' },
+        {
+          method: RequestMethod.POST,
+          path: 'api/forgot-password/reset-password',
+        },
       )
       .forRoutes('*');
   }

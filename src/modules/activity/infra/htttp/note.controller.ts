@@ -43,11 +43,11 @@ export default class NoteController {
 
     @Res() res: Response,
   ): Promise<Response> {
-    const successfulDelete = await this.deleteNoteForHabitService.execute(
+    const successfulDelete = await this.deleteNoteForHabitService.execute({
       id,
       user_id,
       habit_id,
-    );
+    });
     if (successfulDelete.valueOf()) {
       return res.status(204).send({ message: 'Note has been deleted.' });
     }

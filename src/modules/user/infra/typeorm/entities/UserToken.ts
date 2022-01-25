@@ -22,18 +22,14 @@ class UserToken {
   @CreateDateColumn({ type: 'date' })
   expires_in: Date;
 
+  @Column()
+  used: boolean;
+
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
-  
-  /*
-  constructor(userToken?: Partial<UserToken>) {
-    this.token = userToken.token;
-    this.expires_in = new Date(2030, 10, 10);
-  }
-  */
 }
 
 export default UserToken;
