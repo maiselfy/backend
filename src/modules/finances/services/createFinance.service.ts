@@ -20,7 +20,6 @@ export default class CreateFinanceService {
     date,
     status,
     type,
-    tags,
     user_id,
   }: ICreateFinanceDTO): Promise<Finance> {
     try {
@@ -40,7 +39,6 @@ export default class CreateFinanceService {
         date,
         status,
         type,
-        tags,
         user_id,
       });
 

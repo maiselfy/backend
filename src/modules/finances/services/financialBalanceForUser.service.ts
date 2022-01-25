@@ -16,14 +16,14 @@ export default class FinancialBalanceForUserService {
   financialOutputsSum: number;
   financialBalance: number;
 
-  async execute({ userId, financeId }): Promise<any> {
+  async execute(user_id: string): Promise<number> {
     this.financialInputsSum = 0.0;
     this.financialOutputsSum = 0.0;
     this.financialBalance = 0.0;
 
     try {
       const user = await this.usersRepository.findOne({
-        where: { id: userId },
+        where: { id: user_id },
       });
 
       if (!user) {
@@ -34,16 +34,18 @@ export default class FinancialBalanceForUserService {
       }
 
       const financialInputs = await this.financesRepository.find({
-        where: { userId, type: 'INPUT' },
+        where: { user_id, type: 'INPUT' },
       });
 
       const financialOutputs = await this.financesRepository.find({
-        where: { userId, type: 'OUTPUT' },
+        where: { user_id, type: 'OUTPUT' },
       });
 
-      const haveFinances = allFinances.length;
-
-      if (haveFinances === 0 || null) {
+      if (
+        financialInputs.length === 0 ||
+        null ||
+        financialOutputs.length === 0
+      ) {
         throw new HttpException(
           {
             message: 'Sorry, this user has no registered finances',
@@ -54,16 +56,17 @@ export default class FinancialBalanceForUserService {
       }
 
       financialInputs.forEach(input => {
-        financialInputsSum += input.value;
+        this.financialInputsSum += input.value;
       });
 
       financialOutputs.forEach(output => {
-        financialOutputsSum += output.value;
+        this.financialOutputsSum += output.value;
       });
 
-      financialBalance = financialInputsSum - financialOutputsSum;
+      this.financialBalance =
+        this.financialInputsSum - this.financialOutputsSum;
 
-      return financialBalance;
+      return this.financialBalance;
     } catch (error) {
       if (error) throw error;
       throw new HttpException(

@@ -44,12 +44,6 @@ class Finance {
   })
   type: TypeFinance;
 
-  @OneToMany(
-    () => Tag,
-    tag => tag.finance,
-  )
-  tags: Tag[];
-
   @Column()
   user_id: string;
 

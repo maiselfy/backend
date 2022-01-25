@@ -13,9 +13,9 @@ export default class UpdateFinanceService {
   ) {}
 
   async execute(
-    id: string,
     user_id: string,
-    { description, value, date, status, tags }: IUpdateFinanceDTO,
+    id: string,
+    { description, value, date, status }: IUpdateFinanceDTO,
   ): Promise<Finance> {
     try {
       const finance = await this.financesRepository.findOne({
@@ -45,7 +45,6 @@ export default class UpdateFinanceService {
         value,
         date,
         status,
-        tags,
       });
 
       await this.financesRepository.save(updatedFinance);

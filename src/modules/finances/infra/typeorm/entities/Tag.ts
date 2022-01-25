@@ -29,11 +29,6 @@ class Tag {
   @Column('uuid')
   finance_id: string;
 
-  @ManyToOne(
-    () => Finance,
-    finance => finance.tags,
-  )
-
   @JoinColumn({ name: 'finance_id' })
   finance: Finance;
 

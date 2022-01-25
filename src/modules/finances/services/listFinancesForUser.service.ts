@@ -5,7 +5,7 @@ import User from '../../user/infra/typeorm/entities/User';
 import Finance from '../infra/typeorm/entities/Finance';
 
 @Injectable()
-export default class ListFinancesService {
+export default class ListFinancesForUserService {
   constructor(
     @InjectRepository(Finance) private financesRepository: Repository<Finance>,
     @InjectRepository(User) private usersRepository: Repository<User>,
