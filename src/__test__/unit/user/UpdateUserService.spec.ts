@@ -58,7 +58,7 @@ describe('Update User', () => {
     updateUserService = module.get<UpdateUserService>(UpdateUserService);
   });
 
-  it('Should be able defined create update user service', () => {
+  it('Should be able defined create update user service', async () => {
     expect(updateUserService).toBeDefined();
   });
 

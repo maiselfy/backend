@@ -43,7 +43,7 @@ describe('Delete User', () => {
     deleteUserService = module.get<DeleteUserService>(DeleteUserService);
   });
 
-  it('Should be able defined create delete user service', () => {
+  it('Should be able defined create delete user service', async () => {
     expect(deleteUserService).toBeDefined();
   });
 

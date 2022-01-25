@@ -30,6 +30,7 @@ describe('Send Email', () => {
     expires_in: undefined,
     created_at: undefined,
     updated_at: undefined,
+    used: false,
   };
 
   const emailCreateUserSend = {
@@ -89,7 +90,7 @@ describe('Send Email', () => {
     );
   });
 
-  it('Should be able defined create user service', () => {
+  it('Should be able defined create user service', async () => {
     expect(sendEmailService).toBeDefined();
   });
 

@@ -61,7 +61,7 @@ describe('Authenticate User', () => {
     );
   });
 
-  it('Should be able defined create authenticate user service', () => {
+  it('Should be able defined create authenticate user service', async () => {
     expect(authenticateUserService).toBeDefined();
   });
 

@@ -1,8 +1,13 @@
 import { Repository } from 'typeorm';
 import Habit from '../../habit/infra/typeorm/entities/Habit';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import User from '../../user/infra/typeorm/entities/User';
 import Note from '../infra/typeorm/entities/Note';
 import ICreateNoteDTO from '../dtos/ICreateNoteDTO';
 
@@ -25,6 +30,12 @@ export default class CreateNoteForHabitService {
           'It is not possible to perform the operation, as there is no corresponding registered user',
           HttpStatus.NOT_FOUND,
         );
+
+      const habitFind = await this.habitsRepository.findOne({
+        where: { id: habit_id },
+      });
+
+      if (!habitFind) throw new NotFoundException('No id for habit was found');
 
       const noteForHabit = this.notesRepository.create({
         user_id,
