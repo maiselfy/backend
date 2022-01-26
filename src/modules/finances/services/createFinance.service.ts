@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../user/infra/typeorm/entities/User';
 import { Repository } from 'typeorm';
 import ICreateFinanceDTO from '../dtos/ICreateFinanceDTO';
 import Finance from '../infra/typeorm/entities/Finance';
@@ -10,7 +10,6 @@ import Tag from '../infra/typeorm/entities/Tag';
 export default class CreateFinanceService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
-    @InjectRepository(Tag) private tagsRepository: Repository<Tag>,
     @InjectRepository(Finance) private financesRepository: Repository<Finance>,
   ) {}
 
