@@ -1,7 +1,6 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from '../../user/infra/typeorm/entities/User';
 import IUpdateFinanceDTO from '../dtos/IUpdateFinanceDTO';
 import Finance from '../infra/typeorm/entities/Finance';
 
@@ -9,7 +8,6 @@ import Finance from '../infra/typeorm/entities/Finance';
 export default class UpdateFinanceService {
   constructor(
     @InjectRepository(Finance) private financesRepository: Repository<Finance>,
-    @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
   async execute(
@@ -51,7 +49,7 @@ export default class UpdateFinanceService {
 
       return finance;
     } catch (error) {
-      if (error) return error;
+      if (error) throw error;
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
