@@ -51,14 +51,13 @@ export class FinanceController {
     @Param('user_id') user_id: string,
     @Param('id') id: string,
     @Body()
-    { description, value, date, status, tags }: IUpdateFinanceDTO,
+    { description, value, date, status }: IUpdateFinanceDTO,
   ): Promise<Finance> {
     return this.updateFinanceService.execute(user_id, id, {
       description,
       value,
       date,
       status,
-      tags,
     });
   }
 
