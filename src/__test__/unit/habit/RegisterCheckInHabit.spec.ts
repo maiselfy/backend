@@ -49,7 +49,7 @@ describe('create habit', () => {
   const habitDayCheckEntity: IRegisterCheckInHabitDTO = {
     user_id: '12345',
     habit_id: '12345',
-    date: new Date().getDate(),
+    date: '2020/10/11',
   };
 
   let habitService: RegisterCheckInHabitService;
@@ -104,7 +104,7 @@ describe('create habit', () => {
     const data: IRegisterCheckInHabitDTO = {
       user_id: '12345',
       habit_id: '12345',
-      date: new Date().getDate(),
+      date: '2020/10/11',
     };
 
     expect(habitService.execute(data)).rejects.toThrowError();
