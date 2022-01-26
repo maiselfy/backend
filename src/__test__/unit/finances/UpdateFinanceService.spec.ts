@@ -63,7 +63,6 @@ describe('update user', () => {
       description: 'nova descrição',
       status: true,
       value: 1000,
-      tag: [],
     };
 
     const user_id = 'b6ce2dba-0577-4fe5-97bf-5fa55ee7d63e';
@@ -74,7 +73,6 @@ describe('update user', () => {
       description: tags.description,
       status: tags.status,
       value: tags.value,
-      tags: tags.tag,
     });
 
     expect(response).toEqual(financeEntity);
@@ -91,7 +89,6 @@ describe('update user', () => {
       description: 'nova descrição',
       status: true,
       value: 1000,
-      tag: [],
     };
 
     const user_id = 'b6ce2dba-0577-4fe5-97bf-5fa55ee7d63e';
@@ -103,7 +100,6 @@ describe('update user', () => {
         description: tags.description,
         status: tags.status,
         value: tags.value,
-        tags: tags.tag,
       }),
     ).rejects.toThrowError();
     expect(financeRepository.findOne).toBeCalledTimes(1);
