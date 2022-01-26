@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Exclude, Expose } from 'class-transformer';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../../../user/infra/typeorm/entities/User';
 
 import {
   Column,

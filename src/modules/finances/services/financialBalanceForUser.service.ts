@@ -1,7 +1,7 @@
 import { Between, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
+import User from '../../../modules/user/infra/typeorm/entities/User';
 import { intervalToDuration } from 'date-fns';
 import Finance from '../infra/typeorm/entities/Finance';
 
