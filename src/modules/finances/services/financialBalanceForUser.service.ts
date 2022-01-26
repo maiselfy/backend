@@ -41,20 +41,6 @@ export default class FinancialBalanceForUserService {
         where: { user_id, type: 'OUTPUT' },
       });
 
-      if (
-        financialInputs.length === 0 ||
-        null ||
-        financialOutputs.length === 0
-      ) {
-        throw new HttpException(
-          {
-            message: 'Sorry, this user has no registered finances',
-            code: HttpStatus.NOT_FOUND,
-          },
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
       financialInputs.forEach(input => {
         this.financialInputsSum += input.value;
       });

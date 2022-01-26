@@ -5,5 +5,4 @@ export default interface IUpdateFinanceDTO {
   value: number;
   date: Date;
   status: boolean;
-  tags?: Tag[];
 }
