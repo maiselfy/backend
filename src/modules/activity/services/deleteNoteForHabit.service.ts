@@ -1,9 +1,20 @@
 import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import User from 'src/modules/user/infra/typeorm/entities/User';
-import Habit from 'src/modules/habit/infra/typeorm/entities/Habit';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import User from '../../../modules/user/infra/typeorm/entities/User';
+import Habit from '../../../modules/habit/infra/typeorm/entities/Habit';
 import Note from '../infra/typeorm/entities/Note';
+
+interface IDeleteNote {
+  id: string;
+  user_id: string;
+  habit_id: string;
+}
 
 @Injectable()
 export default class DeleteNoteForHabitService {
@@ -12,11 +23,7 @@ export default class DeleteNoteForHabitService {
     @InjectRepository(Note) private notesRepository: Repository<Note>,
   ) {}
 
-  async execute(
-    id: string,
-    user_id: string,
-    habit_id: string,
-  ): Promise<boolean> {
+  async execute({ id, user_id, habit_id }: IDeleteNote): Promise<boolean> {
     try {
       const habit = await this.habitsRepository.findOne({
         where: { id: habit_id },
@@ -62,7 +69,8 @@ export default class DeleteNoteForHabitService {
         return true;
       }
       return false;
-    } catch {
+    } catch (error) {
+      console.log(error);
       throw new HttpException(
         'Sorry, this operation could not be performed, please try again.',
         HttpStatus.BAD_REQUEST,
